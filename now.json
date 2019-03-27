@@ -12,7 +12,10 @@
       "methods": [
         "GET"
       ],
-      "dest": "src/index.js"
+      "dest": "src/index.js",
+      "headers": {
+        "Content-Type": "application/json"
+      }
     }
   ]
 }
