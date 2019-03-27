@@ -3,5 +3,5 @@
 const pkg = require('../package.json')
 
 module.exports = (req, res) => {
-  res.end(pkg)
+  res.end(JSON.stringify(pkg))
 }
