@@ -1,9 +1,7 @@
 'use strict'
 
-const { parse } = require('url')
+const pkg = require('../package.json')
 
 module.exports = (req, res) => {
-  const { query } = parse(req.url, true)
-  const { name = 'World' } = query
-  res.end(`Hello ${name}!`)
+  res.end(pkg)
 }
