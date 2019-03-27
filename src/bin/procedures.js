@@ -7,5 +7,6 @@ let task = () => {
   if (count === 30) {
     process.exit(1)
   }
+  setTimeout(task, 1000)
 }
-setTimeout(task, 1000)
+task()
