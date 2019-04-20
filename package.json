@@ -35,6 +35,12 @@
     }
   },
   "dependencies": {
-    "ecomplus-app-sdk": "^1.9.6"
+    "bling-erp-sdk": "0.0.2",
+    "console-files": "^2.2.0",
+    "ecomplus-app-sdk": "^1.9.6",
+    "express": "^4.16.4",
+    "mysql": "^2.16.0",
+    "nodemon": "^1.18.11",
+    "sqlite3": "^4.0.6"
   }
 }
