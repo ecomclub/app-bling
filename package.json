@@ -35,7 +35,7 @@
     }
   },
   "dependencies": {
-    "bling-erp-sdk": "0.0.3",
+    "bling-erp-sdk": "0.0.2",
     "console-files": "^2.2.0",
     "ecomplus-app-sdk": "^1.9.7",
     "express": "^4.16.4",
