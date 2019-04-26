@@ -7,6 +7,9 @@ yarn-error.log*
 _stderr
 logger.*
 
+# packages
+packages-lock.json
+
 # Runtime data
 pids
 *.pid
