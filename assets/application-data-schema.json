@@ -1,189 +1,157 @@
-[
-  {
-    "definitions": {},
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://example.com/root.json",
-    "type": "object",
-    "title": "The Root Schema",
-    "required": [
-      "synchronize"
-    ],
-    "properties": {
-      "synchronize": {
-        "$id": "#/properties/synchronize",
+{
+  "app_id": 1243,
+  "title": "ERP Bling",
+  "slug": "bling",
+  "paid": false,
+  "version": "1.0.1",
+  "type": "external",
+  "github_repository": "https://github.com/ecomclub/app-bling",
+  "admin_settings": {
+    "ecomplus": {
+      "schema": {
         "type": "object",
-        "title": "The Synchronize Schema",
+        "title": "Configurações E-Com Plus - Bling",
         "required": [
-          "ecomplus",
-          "bling"
+          "products",
+          "orders"
         ],
         "properties": {
-          "ecomplus": {
-            "$id": "#/properties/synchronize/properties/ecomplus",
+          "products": {
             "type": "object",
-            "title": "The Ecomplus Schema",
+            "title": "Sincronização de Produtos:",
+            "description": "Configuração para sincronização de produtos entre E-Com Plus e Bling",
             "required": [
-              "products",
-              "orders"
+              "all",
+              "auto",
+              "ids"
             ],
             "properties": {
-              "products": {
-                "$id": "#/properties/synchronize/properties/ecomplus/properties/products",
-                "type": "object",
-                "title": "The Products Schema",
-                "required": [
-                  "all",
-                  "auto",
-                  "ids"
-                ],
-                "properties": {
-                  "all": {
-                    "$id": "#/properties/synchronize/properties/ecomplus/properties/products/properties/all",
-                    "type": "boolean",
-                    "title": "The All Schema",
-                    "default": false,
-                    "examples": [
-                      true
-                    ]
-                  },
-                  "auto": {
-                    "$id": "#/properties/synchronize/properties/ecomplus/properties/products/properties/auto",
-                    "type": "boolean",
-                    "title": "The Auto Schema",
-                    "default": false,
-                    "examples": [
-                      false
-                    ]
-                  },
-                  "ids": {
-                    "$id": "#/properties/synchronize/properties/ecomplus/properties/products/properties/ids",
-                    "type": "array",
-                    "title": "The Ids Schema"
-                  }
-                }
+              "all": {
+                "type": "boolean",
+                "title": "Todos produtos",
+                "description": "Sincronizar todos os produtos de uma vez com Bling",
+                "default": false,
+                "examples": [
+                  true
+                ]
               },
-              "orders": {
-                "$id": "#/properties/synchronize/properties/ecomplus/properties/orders",
-                "type": "object",
-                "title": "The Orders Schema",
-                "required": [
-                  "all",
-                  "auto",
-                  "ids"
-                ],
-                "properties": {
-                  "all": {
-                    "$id": "#/properties/synchronize/properties/ecomplus/properties/orders/properties/all",
-                    "type": "boolean",
-                    "title": "The All Schema",
-                    "default": false,
-                    "examples": [
-                      true
-                    ]
-                  },
-                  "auto": {
-                    "$id": "#/properties/synchronize/properties/ecomplus/properties/orders/properties/auto",
-                    "type": "boolean",
-                    "title": "The Auto Schema",
-                    "default": false,
-                    "examples": [
-                      false
-                    ]
-                  },
-                  "ids": {
-                    "$id": "#/properties/synchronize/properties/ecomplus/properties/orders/properties/ids",
-                    "type": "array",
-                    "title": "The Ids Schema"
-                  }
-                }
+              "auto": {
+                "type": "boolean",
+                "title": "Automatica",
+                "description": "Se tiver configurado como Sim, toda vez que houver alteração será feita a modificação. Caso contrário, será apenas uma vez, ou seja, no momento da solicitação",
+                "default": false,
+                "examples": [
+                  false
+                ]
+              },
+              "ids": {
+                "type": "array",
+                "title": "IDs",
+                "description": "Sincronizar apenas alguns IDs"
               }
             }
           },
-          "bling": {
-            "$id": "#/properties/synchronize/properties/bling",
+          "orders": {
             "type": "object",
-            "title": "The Bling Schema",
+            "title": "Sincronizar Pedidos",
+            "description": "Configuração de sincronização entre pedido E-Com Plus e Bling",
             "required": [
-              "orders",
-              "products"
+              "all",
+              "auto",
+              "ids"
             ],
             "properties": {
-              "orders": {
-                "$id": "#/properties/synchronize/properties/bling/properties/orders",
-                "type": "object",
-                "title": "The Orders Schema",
-                "required": [
-                  "synchronize"
-                ],
-                "properties": {
-                  "synchronize": {
-                    "$id": "#/properties/synchronize/properties/bling/properties/orders/properties/synchronize",
-                    "type": "boolean",
-                    "title": "The Synchronize Schema",
-                    "default": false,
-                    "examples": [
-                      false
-                    ]
-                  }
-                }
+              "all": {
+                "type": "boolean",
+                "title": "Todos os Pedidos",
+                "description": "Se marcar como sim, você irá sincronizar todos os pedidos de sua loja com o Bling",
+                "default": false,
+                "examples": [
+                  true
+                ]
               },
-              "products": {
-                "$id": "#/properties/synchronize/properties/bling/properties/products",
-                "type": "object",
-                "title": "The Products Schema",
-                "required": [
-                  "stock"
-                ],
-                "properties": {
-                  "stock": {
-                    "$id": "#/properties/synchronize/properties/bling/properties/products/properties/stock",
-                    "type": "boolean",
-                    "title": "The Stock Schema",
-                    "default": false,
-                    "examples": [
-                      true
-                    ]
-                  }
-                }
+              "auto": {
+                "type": "boolean",
+                "title": "Automatica",
+                "description": "Se marcar como Sim, todos os pedidos irão sincronizar automaticamente entre loja e Bling, toda vez que houver alguma alteração. Caso seja não, será feita apenas uma mudança, na vez solicitada",
+                "default": false,
+                "examples": [
+                  false
+                ]
+              },
+              "ids": {
+                "type": "array",
+                "title": "IDs",
+                "description": "Se desejar, insira apenas os IDs de pedidos que deseje ter sincronização"
               }
             }
           }
         }
-      }
-    }
-  },
-  {
-    "definitions": {},
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://example.com/root.json",
-    "type": "object",
-    "title": "The Root Schema",
-    "required": [
-      "hidden_data"
-    ],
-    "properties": {
-      "hidden_data": {
-        "$id": "#/properties/hidden_data",
+      },
+      "hide": false
+    },
+    "bling": {
+      "schema": {
         "type": "object",
-        "title": "The Hidden_data Schema",
+        "title": "Configurações Bling",
         "required": [
-          "bling_api_key",
-          "bling_loja_id"
+          "orders",
+          "products"
         ],
         "properties": {
-          "bling_api_key": {
-            "$id": "#/properties/hidden_data/properties/bling_api_key",
-            "type": "string",
-            "title": "The Bling_api_key Schema",
-            "pattern": "^(.*)$"
+          "orders": {
+            "type": "object",
+            "title": "Configurações Pedidos",
+            "required": [
+              "synchronize"
+            ],
+            "properties": {
+              "synchronize": {
+                "type": "boolean",
+                "title": "Sincronizar pedidos Bling",
+                "default": false,
+                "examples": [
+                  false
+                ]
+              }
+            }
           },
-          "bling_loja_id": {
-            "$id": "#/properties/hidden_data/properties/bling_loja_id",
-            "type": "integer",
-            "title": "The Bling_loja_id Schema"
+          "products": {
+            "type": "object",
+            "title": "Configurações estoque",
+            "required": [
+              "stock"
+            ],
+            "properties": {
+              "stock": {
+                "type": "boolean",
+                "title": "Sincronizar estoque com Bling",
+                "default": false,
+                "examples": [
+                  true
+                ]
+              }
+            }
           }
         }
-      }
+      },
+      "hide": false
+    },
+    "bling_api_key": {
+      "schema": {
+        "type": "string",
+        "title": "API KEY Bling",
+        "description": "Acesse no Bling em Preferências > Sistemas > Usuários. Caso não tenha, crie o usuário API com todas permissões, copie a API KEY e cole. Caso já tenha, basta copiar do usuário API e colar"
+      },
+      "hide": true
+    },
+    "bling_loja_id": {
+      "schema": {
+        "type": "integer",
+        "title": "ID da sua loja Bling",
+        "description": "Acesse no Bling em Preferências > Integrações > Configurações de integração com lojas virtuais e marketplaces, clique na loja virtual vinculada a E-Com Plus tipo API, copie o código da loja API Bling e cole na E-Com Plus"
+      },
+      "hide": true
     }
   }
-]
+}
