@@ -1,0 +1,22 @@
+{
+  "synchronize": {
+    "ecomplus": {
+      "products": {
+        "all": true,
+        "auto": true
+      },
+      "orders": {
+        "all": true,
+        "auto": true
+      }
+    },
+    "bling": {
+      "orders": {
+        "synchronize": true
+      },
+      "products": {
+        "stock": true
+      }
+    }
+  }
+}

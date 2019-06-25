@@ -13,7 +13,7 @@ const mysql = require('./lib/database')
 const db = new sqlite.Database(process.env.ECOM_AUTH_DB)
 //
 require('./bin/uncaughtException')
-require('./lib/services/setup-stores')({ db, ecomAuth })
+// require('./lib/services/setup-stores')({ db, ecomAuth })
 require('./lib/services/synchronizations')({ db, ecomAuth, mysql, Bling })
 
 app.use(bodyParser.urlencoded({ extended: false }))
