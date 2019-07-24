@@ -1,0 +1,254 @@
+{
+  "app_id": 1245,
+  "state": "active",
+  "title": "bling",
+  "slug": "bling",
+  "paid": false,
+  "version": "0.1.0",
+  "type": "external",
+  "script_uri": "https://bling.ecomplus.biz",
+  "status": "active",
+  "authentication": true,
+  "auth_callback_uri": "https://bling.ecomplus.biz/ecom/auth-callback",
+  "auth_scope": {
+    "orders": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "orders/hidden_metafields": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "orders/items": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "orders/loyalty_points": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "orders/metafields": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "orders/payments_history": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "orders/shipping_lines": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "orders/transactions": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "procedures": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "products": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "products/categories": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "products/inventory_records": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "products/price": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH"
+    ],
+    "products/quantity": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH"
+    ],
+    "products/variations": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin_settings": {
+    "bling_api_key": {
+      "schema": {
+        "type": "string",
+        "maxLength": 255,
+        "title": "Bling Api KEY",
+        "description": "Chave de acesso para recursos da API",
+      },
+      "hide": true
+    },
+    "bling_loja_id": {
+      "schema": {
+        "type": "number",
+        "multipleOf": 0.0001,
+        "minimum": -99999999,
+        "maximum": 99999999,
+        "title": "Id da Loja",
+        "description": "Configuração opcional, caso informado, todos os produtos enviados da E-Com Plus para o Bling serão viculados a loja informada."
+      },
+      "hide": true
+    },
+    "synchronize": {
+      "schema": {
+        "type": "object",
+        "title": "Configuração de Sincronização",
+        "required": [
+          "ecomplus",
+          "bling"
+        ],
+        "properties": {
+          "ecomplus": {
+            "type": "object",
+            "title": "E-Com Plus",
+            "required": [
+              "products",
+              "orders"
+            ],
+            "properties": {
+              "products": {
+                "type": "object",
+                "title": "Sincronização de Produtos",
+                "required": [
+                  "all",
+                  "ids",
+                  "auto"
+                ],
+                "properties": {
+                  "all": {
+                    "type": "boolean",
+                    "title": "Todos os Produtos",
+                    "description": "Sincronizar todos os produtos da E-Com Plus para o Bling",
+                    "default": false
+                  },
+                  "ids": {
+                    "type": "array",
+                    "title": "Apenas Ids",
+                    "description": "Sincronizar apenas os Ids informados"
+                  },
+                  "auto": {
+                    "type": "boolean",
+                    "title": "Sincronização Automática",
+                    "description": "Sincronizar novos produtos automaticamente com o Bling",
+                    "default": false
+                  }
+                }
+              },
+              "orders": {
+                "type": "object",
+                "title": "Sincronização de Pedidos",
+                "required": [
+                  "all",
+                  "ids",
+                  "auto"
+                ],
+                "properties": {
+                  "all": {
+                    "type": "boolean",
+                    "title": "Todos os Peidos",
+                    "description": "Sincronizar todos os pedidos da E-Com Plus para o Bling",
+                    "default": false
+                  },
+                  "ids": {
+                    "type": "array",
+                    "title": "Apenas Ids",
+                    "description": "Sincronizar apenas os Ids informados"
+                  },
+                  "auto": {
+                    "type": "boolean",
+                    "title": "Sincronização Automática",
+                    "description": "Sincronizar novos pedidos automaticamente com o Bling",
+                    "default": false
+                  }
+                }
+              }
+            }
+          },
+          "bling": {
+            "type": "object",
+            "title": "Bling",
+            "required": [
+              "products",
+              "financial_status",
+              "invoices",
+              "shipping_lines"
+            ],
+            "properties": {
+              "products": {
+                "type": "boolean",
+                "title": "Estoque de Produtos",
+                "description": "Alterar o estoque do produto na E-Com Plus sempre que houve alterações de estoque no Bling.",
+                "default": false
+              },
+              "financial_status": {
+                "type": "boolean",
+                "title": "Situação do Pedido",
+                "description": "Alterar o status financeiro do pedido na E-Com Plus sempre que a situação do pedido for alterada no Bling",
+                "default": false
+              },
+              "invoices": {
+                "type": "boolean",
+                "title": "Nota Fiscais",
+                "description": "Envia informações sobre emissão de notas fiscais para E-Com Plus se emitida via Bling",
+                "default": false
+              },
+              "shipping_lines": {
+                "type": "boolean",
+                "title": "Código de Rastreio",
+                "description": "Atualiza código de rastreio dos pedidos caso etiqueta de envio seja comprada via Bling",
+                "default": false
+              }
+            }
+          }
+        }
+      },
+      "hide": false
+    }
+  }
+}
