@@ -1,7 +1,7 @@
 {
   "app_id": 1245,
   "state": "active",
-  "title": "bling",
+  "title": "Bling ERP",
   "slug": "bling",
   "paid": false,
   "version": "0.1.0",
@@ -120,7 +120,7 @@
         "type": "string",
         "maxLength": 255,
         "title": "Bling Api KEY",
-        "description": "Chave de acesso para recursos da API",
+        "description": "Chave de acesso para recursos da API"
       },
       "hide": true
     },
@@ -138,7 +138,7 @@
     "synchronize": {
       "schema": {
         "type": "object",
-        "title": "Configuração de Sincronização",
+        "title": "Sincronização entre os serviços",
         "required": [
           "ecomplus",
           "bling"
@@ -146,7 +146,8 @@
         "properties": {
           "ecomplus": {
             "type": "object",
-            "title": "E-Com Plus",
+            "title": "Configurações E-Com Plus",
+            "description": "Configuração de sincronizações da E-Com Plus",
             "required": [
               "products",
               "orders"
@@ -154,7 +155,8 @@
             "properties": {
               "products": {
                 "type": "object",
-                "title": "Sincronização de Produtos",
+                "title": "Sincronização de produtos",
+                "description": "Defina como os produtos serão mantidos entre as plataformas",
                 "required": [
                   "all",
                   "ids",
@@ -163,26 +165,27 @@
                 "properties": {
                   "all": {
                     "type": "boolean",
-                    "title": "Todos os Produtos",
-                    "description": "Sincronizar todos os produtos da E-Com Plus para o Bling",
+                    "title": "Sincronizar todos os produtos",
+                    "description": "Enviar todos os produtos da E-Com Plus pra o Bling",
                     "default": false
                   },
                   "ids": {
                     "type": "array",
-                    "title": "Apenas Ids",
-                    "description": "Sincronizar apenas os Ids informados"
+                    "title": "Sincronizar IDs de produtos",
+                    "description": "Sincronizar apenas os produtos informados"
                   },
                   "auto": {
                     "type": "boolean",
-                    "title": "Sincronização Automática",
-                    "description": "Sincronizar novos produtos automaticamente com o Bling",
+                    "title": "Sincronização automática",
+                    "description": "Sincronizar novos produtos automaticamente para o Bling",
                     "default": false
                   }
                 }
               },
               "orders": {
                 "type": "object",
-                "title": "Sincronização de Pedidos",
+                "title": "Sincronização de pedidos",
+                "description": "Denina como os pedidos serão mantindos entre as plataformas",
                 "required": [
                   "all",
                   "ids",
@@ -191,19 +194,19 @@
                 "properties": {
                   "all": {
                     "type": "boolean",
-                    "title": "Todos os Peidos",
-                    "description": "Sincronizar todos os pedidos da E-Com Plus para o Bling",
+                    "title": "Sincronizar todos os pedidos",
+                    "description": "Enviar todos os pedidos da E-Com Plus para o Bling",
                     "default": false
                   },
                   "ids": {
                     "type": "array",
-                    "title": "Apenas Ids",
-                    "description": "Sincronizar apenas os Ids informados"
+                    "title": "Sincronizar Ids de pedidos",
+                    "description": "Sincronizar apenas os pedidos informados"
                   },
                   "auto": {
                     "type": "boolean",
-                    "title": "Sincronização Automática",
-                    "description": "Sincronizar novos pedidos automaticamente com o Bling",
+                    "title": "Sincronização automática",
+                    "description": "Sincronizar novos pedidos automaticamente para o Bling",
                     "default": false
                   }
                 }
@@ -212,7 +215,8 @@
           },
           "bling": {
             "type": "object",
-            "title": "Bling",
+            "title": "Configurações Bling",
+            "description": "Configuralçies de sincronizações do Bling",
             "required": [
               "products",
               "financial_status",
@@ -222,26 +226,26 @@
             "properties": {
               "products": {
                 "type": "boolean",
-                "title": "Estoque de Produtos",
-                "description": "Alterar o estoque do produto na E-Com Plus sempre que houve alterações de estoque no Bling.",
+                "title": "Produtos",
+                "description": "Atualizar estoque de produtos na E-Com Plus sempre que for alterado no Bling",
                 "default": false
               },
               "financial_status": {
                 "type": "boolean",
-                "title": "Situação do Pedido",
-                "description": "Alterar o status financeiro do pedido na E-Com Plus sempre que a situação do pedido for alterada no Bling",
+                "title": "Situação de Pedidos",
+                "description": "Atualizar situação do pedido na E-Com Plus sempre que for alterado no Bling",
                 "default": false
               },
               "invoices": {
                 "type": "boolean",
-                "title": "Nota Fiscais",
-                "description": "Envia informações sobre emissão de notas fiscais para E-Com Plus se emitida via Bling",
+                "title": "Notas Fiscais",
+                "description": "Atualizar informações referente a notas fiscais sempre que forem emitidas no Bling e viculadas ao pedido",
                 "default": false
               },
               "shipping_lines": {
                 "type": "boolean",
-                "title": "Código de Rastreio",
-                "description": "Atualiza código de rastreio dos pedidos caso etiqueta de envio seja comprada via Bling",
+                "title": "Códigos de Rastreio",
+                "description": "Atualizar informações sobre código de rastreio dos pedidos",
                 "default": false
               }
             }
