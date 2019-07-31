@@ -12,14 +12,17 @@ const { ecomAuth, ecomServerIps } = require('ecomplus-app-sdk')
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const cors = require('cors')
 const router = express.Router()
 const port = process.env.PORT || 3000
 const sqlite = require('sqlite3').verbose()
 const envDbFilename = process.env.ECOM_AUTH_DB
 const db = new sqlite.Database(envDbFilename)
+const path = require('path')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cors())
 
 app.use((req, res, next) => {
   if (req.url.startsWith('/ecom/')) {
@@ -56,8 +59,14 @@ ecomAuth.then(appSdk => {
     router.post(filename, require(`${routes}${filename}`)(appSdk))
   })
 
-  router.post('/bling/webhook', require(`${routes}/bling/webhook`)(appSdk))
   /* Add custom app routes here */
+  router.post('/bling/webhook', require(`${routes}/bling/webhook`)(appSdk))
+  router.get('/bling/products', require(`${routes}/bling/bling-items`)())
+
+  app.use(express.static('assets'))
+  router.get('/app/', function (req, res) {
+    return res.sendFile(path.join(__dirname, '../assets', 'index.html'))
+  })
 
   // add router and start web server
   app.use(router)
