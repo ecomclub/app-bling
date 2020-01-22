@@ -17,11 +17,11 @@ module.exports = (appSdk) => {
           const body = JSON.parse(data)
           if (body.retorno.hasOwnProperty('estoques')) {
             const stockManager = require('./../../lib/bling/handle-stock')(configObj, appSdk, storeId)
-            return stockManager(body)
+            stockManager(body)
           }
           if (body.retorno.hasOwnProperty('pedidos')) {
             const ordersManager = require('./../../lib/bling/handle-orders')(configObj, appSdk, storeId)
-            return ordersManager(body)
+            ordersManager(body)
           }
         } catch (err) {
           console.log('Errão', err)
