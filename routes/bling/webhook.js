@@ -4,6 +4,7 @@ const SKIP_TRIGGER_NAME = 'SkipTrigger'
 const ECHO_SUCCESS = 'SUCCESS'
 const ECHO_SKIP = 'SKIP'
 const ECHO_API_ERROR = 'STORE_API_ERR'
+const logger = require('console-files')
 
 module.exports = (appSdk) => {
   return (req, res) => {
@@ -13,18 +14,20 @@ module.exports = (appSdk) => {
     // get app configured options
     getConfig({ appSdk, storeId }, true)
       .then(configObj => {
+        let body
         try {
-          const body = JSON.parse(data)
-          if (body.retorno.hasOwnProperty('estoques')) {
-            const stockManager = require('./../../lib/bling/handle-stock')(configObj, appSdk, storeId)
-            stockManager(body)
-          }
-          if (body.retorno.hasOwnProperty('pedidos')) {
-            const ordersManager = require('./../../lib/bling/handle-orders')(configObj, appSdk, storeId)
-            ordersManager(body)
-          }
+          body = JSON.parse(data)
         } catch (err) {
-          console.log('Errão', err)
+          logger.error('ParseBodyErr', err)
+        }
+
+        if (body.retorno.hasOwnProperty('estoques')) {
+          const stockManager = require('./../../lib/bling/handle-stock')(configObj, appSdk, storeId)
+          stockManager(body)
+        }
+        if (body.retorno.hasOwnProperty('pedidos')) {
+          const ordersManager = require('./../../lib/bling/handle-orders')(configObj, appSdk, storeId)
+          ordersManager(body)
         }
         // all done
         res.send(ECHO_SUCCESS)
