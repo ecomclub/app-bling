@@ -23,6 +23,13 @@ ecomAuth.then(appSdk => {
       }
     })
   }
+
+  // products
+  require('./../lib/ecomplus/products/save-in-db')(appSdk)
+  require('./../lib/ecomplus/products/send-to-bling')(appSdk)
+  // orders
+  require('./../lib/ecomplus/orders/save-in-db')(appSdk)
+  require('./../lib/ecomplus/orders/sent-to-bling')(appSdk)
 })
 
 ecomAuth.catch(err => {
