@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 10-Maio-2019 às 11:45
--- Versão do servidor: 10.1.38-MariaDB-0ubuntu0.18.04.1
--- PHP Version: 7.2.17-0ubuntu0.18.04.1
+-- Generation Time: Jan 29, 2020 at 02:22 PM
+-- Server version: 10.1.43-MariaDB-0ubuntu0.18.04.1
+-- PHP Version: 7.2.24-0ubuntu0.18.04.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,36 +17,37 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `bling_manager`
+-- Database: `bling`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `ecomplus_orders`
+-- Table structure for table `ecomplus_orders`
 --
 
 CREATE TABLE `ecomplus_orders` (
   `id` int(11) NOT NULL,
-  `created_at` datetime,
+  `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `order_store` int(10) NOT NULL,
+  `order_store_id` int(10) NOT NULL,
   `order_ecom_id` varchar(24) DEFAULT NULL,
   `order_loja_id` int(10) NOT NULL,
   `order_ecom_status` varchar(255) DEFAULT NULL,
   `order_bling_status` varchar(255) DEFAULT NULL,
-  `order_bling_id` int(11) DEFAULT NULL
+  `order_bling_id` int(11) DEFAULT NULL,
+  `error` tinyint(255) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `ecomplus_products`
+-- Table structure for table `ecomplus_products`
 --
 
 CREATE TABLE `ecomplus_products` (
   `id` int(11) NOT NULL,
-  `created_at` datetime,
+  `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `product_sku` varchar(100) NOT NULL,
   `product_name` varchar(255) NOT NULL,
@@ -56,13 +57,15 @@ CREATE TABLE `ecomplus_products` (
   `product_bling_stock` int(11) DEFAULT NULL,
   `product_store_id` int(11) NOT NULL,
   `product_loja_id` int(10) NOT NULL,
-  `product_id` varchar(24) NOT NULL
+  `product_id` varchar(24) NOT NULL,
+  `error` tinyint(255) NOT NULL DEFAULT '0',
+  `product_bling_id` bigint(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `ecomplus_products_variations`
+-- Table structure for table `ecomplus_products_variations`
 --
 
 CREATE TABLE `ecomplus_products_variations` (
@@ -75,13 +78,14 @@ CREATE TABLE `ecomplus_products_variations` (
   `lojaId` int(11) DEFAULT NULL,
   `store_id` int(11) DEFAULT NULL,
   `parent_sku` varchar(200) NOT NULL,
-  `updated_at` datetime DEFAULT NULL
+  `updated_at` datetime DEFAULT NULL,
+  `variation_bling_id` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `transaction_history`
+-- Table structure for table `transaction_history`
 --
 
 CREATE TABLE `transaction_history` (
@@ -128,17 +132,17 @@ ALTER TABLE `transaction_history`
 -- AUTO_INCREMENT for table `ecomplus_orders`
 --
 ALTER TABLE `ecomplus_orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2697;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `ecomplus_products`
 --
 ALTER TABLE `ecomplus_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17858;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 --
 -- AUTO_INCREMENT for table `ecomplus_products_variations`
 --
 ALTER TABLE `ecomplus_products_variations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5243;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 --
 -- AUTO_INCREMENT for table `transaction_history`
 --
