@@ -15,9 +15,6 @@ const app = express()
 const cors = require('cors')
 const router = express.Router()
 const port = process.env.PORT || 3000
-const sqlite = require('sqlite3').verbose()
-const envDbFilename = process.env.ECOM_AUTH_DB
-const db = new sqlite.Database(envDbFilename)
 const path = require('path')
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -60,8 +57,12 @@ ecomAuth.then(appSdk => {
   })
 
   /* Add custom app routes here */
-  router.post('/bling/webhook', require(`${routes}/bling/webhook`)(appSdk))
-  router.get('/bling/products', require(`${routes}/bling/bling-items`)())
+  router.post('/bling/webhook', require('./../routes/bling/webhook')(appSdk))
+  router.post('/bling/products', require('./../routes/bling/products')(appSdk))
+
+  // ecomplus
+  router.post('/ecomplus/products', require('./../routes/ecom/products')(appSdk))
+  router.post('/ecomplus/orders', require('./../routes/ecom/orders')(appSdk))
 
   app.use(express.static('assets'))
   router.get('/app/', function (req, res) {
@@ -72,9 +73,6 @@ ecomAuth.then(appSdk => {
   app.use(router)
   app.listen(port)
   logger.log(`--> Starting web app on port :${port}`)
-
-  // jobs
-  require('./../lib/services/setup-procedures')(appSdk, db)
 })
 
 ecomAuth.catch(err => {
