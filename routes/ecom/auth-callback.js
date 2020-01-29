@@ -2,7 +2,6 @@
 
 // log on files
 const logger = require('console-files')
-const { internalApi } = require('./../../lib/Api/Api')
 
 module.exports = (appSdk) => {
   return (req, res) => {
@@ -11,14 +10,6 @@ module.exports = (appSdk) => {
     appSdk.handleCallback(req.storeId, req.body)
 
       .then(({ isNew, authenticationId }) => {
-        // authentication tokens were updated
-        if (isNew) {
-          internalApi
-            .then(api => {
-              api.addAppConfig(req.storeId, req.body.application._id, authenticationId)
-            })
-        }
-
         res.status(204)
         res.end()
       })
