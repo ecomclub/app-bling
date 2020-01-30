@@ -39,11 +39,9 @@
     },
     "bling_loja_id": {
       "schema": {
-        "type": "number",
-        "multipleOf": 0.0001,
-        "minimum": -99999999,
-        "maximum": 99999999,
-        "title": "Id da Loja",
+        "type": "string",
+        "maxLength": 255,
+        "title": "Bling loja id",
         "description": "Configuração opcional, caso informado, todos os produtos enviados da E-Com Plus para o Bling serão viculados a loja informada."
       },
       "hide": true
