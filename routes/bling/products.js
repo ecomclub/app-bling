@@ -89,11 +89,22 @@ module.exports = (appSdk) => {
                             quantity: variacao.variacao.estoqueAtual
                           }
                           body.specifications = {}
+                          variacaoTipo = variacaoTipo.toLowerCase()
+                            .replace(/[áâãà]/g, 'a')
+                            .replace(/[éê]/g, 'e')
+                            .replace(/[íî]/g, 'i')
+                            .replace(/[óôõ]/g, 'o')
+                            .replace(/[ú]/g, 'u')
+                            .replace(/[ç]/g, 'c')
+                            .replace(/-/g, '')
+                            .replace(/\s/g, '-')
+                            .replace(/[^0-9a-z-]/g, '')
                           body.specifications[variacaoTipo] = [
                             {
                               text: variacaoNome
                             }
                           ]
+
                           appSdk
                             .apiRequest(storeId, resource, 'POST', body)
                             .then(resp => resp.response.data)
@@ -103,7 +114,10 @@ module.exports = (appSdk) => {
                                 .save(body.name, data._id, body.sku, schema.sku, body.quantity || 0, body.quantity || 0, configObj.bling_loja_id, storeId)
                                 .then(() => logger.log(`Variação ${data._id} do produto ${schema.sku} criado na store-api | store ${storeId}`))
                             })
-                            .catch(e => logger.error(`Erro ao inserir nova variação no produto ${data._id} | Store ${storeId} | Erro: ${e}`))
+                            .catch(e => {
+                              console.log(e.response.data)
+                              logger.error(`Erro ao inserir nova variação no produto ${data._id} | Store ${storeId} | Erro: ${e}`)
+                            })
                         })
                       }
 
@@ -120,6 +134,7 @@ module.exports = (appSdk) => {
                     })
                 })
                 .catch(e => {
+                  console.error(e)
                   let erro = 'Unexpected error'
                   if (e.response && e.response.data) {
                     erro = JSON.stringify(e.response.data)
