@@ -33,7 +33,6 @@ ecomAuth.then(appSdk => {
 })
 
 ecomAuth.catch(err => {
-  logger.error(err)
   setTimeout(() => {
     // destroy Node process while Store API auth cannot be handled
     process.exit(1)
