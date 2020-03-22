@@ -6,13 +6,13 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "local": "ECOMCLIENT_NOTIMEOUT=true DB_NAME=bling ECOM_AUTH_DB=/var/dbs/bling.sqlite LOGGER_OUTPUT=/var/log/nodejs/bling.out LOGGER_ERRORS=/var/log/nodejs/bling.error LOGGER_FATAL_ERRORS=/var/log/nodejs/_stderr nodemon main.js",
+    "local": "ECOMCLIENT_NOTIMEOUT=true DB_NAME=bling ECOM_AUTH_DB=/var/dbs/bling.sqlite LOGGER_OUTPUT=/var/log/nodejs/bling.out LOGGER_ERRORS=/var/log/nodejs/bling.error LOGGER_FATAL_ERRORS=/var/log/nodejs/_stderr nodemon --inspect main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@ecomplus/client": "^2.0.2",
     "@ecomplus/utils": "^1.2.8",
-    "bling-erp-sdk": "0.0.6",
+    "bling-erp-sdk": "0.0.7",
     "console-files": "^2.3.1",
     "cors": "^2.8.5",
     "ecomplus-app-sdk": "^1.9.7",
@@ -22,6 +22,12 @@
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {
+    "husky": "^4.2.3",
     "standard": "*"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }
