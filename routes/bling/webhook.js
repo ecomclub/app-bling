@@ -90,7 +90,6 @@ module.exports = (appSdk) => {
                               }
                               promise = appSdk.apiRequest(storeId, url, 'PATCH', body)
                             }
-                            promise = appSdk.apiRequest(storeId, url, 'PATCH', body)
                           } else {
                             // variations
                             let variation = data.variations.find(variation => variation.sku === produto.codigo)
