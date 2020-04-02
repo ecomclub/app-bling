@@ -4,7 +4,7 @@
   "title": "Bling ERP",
   "slug": "bling",
   "paid": false,
-  "version": "1.1.5",
+  "version": "1.1.6",
   "type": "external",
   "script_uri": "https://bling.ecomplus.biz",
   "status": "active",
