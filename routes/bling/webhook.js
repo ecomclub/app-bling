@@ -213,16 +213,16 @@ module.exports = (appSdk) => {
                   sync.bling.invoices === true &&
                   (typeof order === 'object')
                 ) {
-                  let promise = new Promise(resolve => {
+                  const promise = new Promise(resolve => {
                     // verifica se a nota ja existe na order
-                    let shippingInvoices = order.shipping_lines.find(shippin => shippin.invoices)
+                    const shippingInvoices = order.shipping_lines.find(shippin => shippin.invoices)
                     let match
                     if (shippingInvoices) {
                       match = shippingInvoices.invoices.find(invoice => invoice.number === trigger.nota.chaveAcesso)
                     }
 
                     if (!shippingInvoices || !match) {
-                      let update = [
+                      const update = [
                         {
                           number: data.nota.chaveAcesso,
                           serial_number: data.nota.numero,
@@ -230,7 +230,7 @@ module.exports = (appSdk) => {
                         }
                       ]
                       resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
-                      appSdk.apiRequest(storeId, resource, 'PATCH', update)
+                      appSdk.apiRequest(storeId, resource, 'PATCH', { invoices: update })
                     }
                     resolve()
                   })
@@ -245,13 +245,13 @@ module.exports = (appSdk) => {
                 ) {
                   if ((order && !order.financial_status) || (order.financial_status.current !== parseStatus(trigger.situacao))) {
                     if (parseStatus(trigger.situacao) !== 'unknown') {
-                      let update = {
+                      const update = {
                         financial_status: {
                           current: parseStatus(trigger.situacao)
                         }
                       }
-                      let resource = `/orders/${order._id}.json`
-                      let promise = appSdk.apiRequest(storeId, resource, 'PATCH', update)
+                      const resource = `/orders/${order._id}.json`
+                      const promise = appSdk.apiRequest(storeId, resource, 'PATCH', update)
                       promises.push(promise)
                     }
                   }
@@ -277,15 +277,15 @@ module.exports = (appSdk) => {
                     })
 
                     if (codes.length) {
-                      let updateCodes = []
+                      const updateCodes = []
                       codes.forEach(code => {
                         updateCodes.push({
                           code: code.codigo,
                           tag: code.tag.replace(' ', '').toLowerCase()
                         })
                       })
-                      let resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
-                      let promise = appSdk.apiRequest(storeId, resource, 'PATCH', updateCodes)
+                      const resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
+                      const promise = appSdk.apiRequest(storeId, resource, 'PATCH', { tracking_codes: updateCodes })
                       promises.push(promise)
                     }
                   }
