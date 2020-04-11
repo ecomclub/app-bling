@@ -14,20 +14,23 @@ ecomAuth.then(appSdk => {
   // configure setup for stores
   // list of procedures to save
   const procedures = require('./../lib/store-api/procedures')
-  if (procedures && procedures.triggers && procedures.triggers.length) {
-    appSdk.configureSetup(procedures, (err, { storeId }) => {
-      if (!err) {
-        logger.log('--> Setup store #' + storeId)
-      } else if (!err.appAuthRemoved) {
-        logger.error(err)
-      }
-    })
+  if (procedures && procedures.length) {
+    const { triggers } = procedures[0]
+    if (triggers && triggers.length) {
+      appSdk.configureSetup(procedures, (err, { storeId }) => {
+        if (!err) {
+          logger.log('--> Setup store #' + storeId)
+        } else if (!err.appAuthRemoved) {
+          logger.error(err)
+        }
+      })
+    }
   }
 
   // products
   require('./../lib/ecomplus/products/save-in-db')(appSdk)
   require('./../lib/ecomplus/products/send-to-bling')(appSdk)
-  // orders
+  // // orders
   require('./../lib/ecomplus/orders/save-in-db')(appSdk)
   require('./../lib/ecomplus/orders/sent-to-bling')(appSdk)
 })
