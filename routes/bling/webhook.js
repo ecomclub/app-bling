@@ -329,7 +329,7 @@ module.exports = (appSdk) => {
 
 const parseStatus = (status) => {
   switch (status) {
-    case 'Em Aberto':
+    case 'Em aberto':
       return 'pending' // financial_status.current
     case 'Em Andamento':
     case 'Em digitação':

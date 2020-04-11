@@ -69,9 +69,10 @@ module.exports = (appSdk) => {
                           .then(row => {
                             if (!row || !row.length) {
                               const order = result[0]
+                              const status = (order.financial_status && order.financial_status.current) || null
                               return database
                                 .orders
-                                .save(storeId, order._id, null, configObj.bling_loja_id, null)
+                                .save(storeId, order._id, null, configObj.bling_loja_id, status, 'Em Aberto')
                                 .then(() => logger.log(`Pedido ${order.number} salvo no banco e será enviado na proxima sincronização | store #${storeId}`))
                             }
                           })
@@ -84,6 +85,7 @@ module.exports = (appSdk) => {
           }
 
           recursive()
+          return res.end()
         } else {
           res.status(401)
           res.send({
