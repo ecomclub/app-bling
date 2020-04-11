@@ -53,7 +53,7 @@ module.exports = (appSdk) => {
                 if (produtos && Array.isArray(produtos) && produtos[0] && produtos[0].produto) {
                   return produtos[0].produto
                 } else {
-                  //todo
+                  // todo
                 }
               })
 
@@ -156,7 +156,7 @@ module.exports = (appSdk) => {
                           if (produtos && Array.isArray(produtos) && produtos[0] && produtos[0].produto) {
                             return produtos[0].produto
                           } else {
-                            //todo
+                            // todo
                           }
                         })
 

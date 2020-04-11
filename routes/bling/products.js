@@ -5,9 +5,6 @@ const logger = require('console-files')
 // bling client
 const Bling = require('bling-erp-sdk')
 
-// database
-const database = require('../../lib/database')
-
 // read configured E-Com Plus app data
 const getConfig = require(process.cwd() + '/lib/store-api/get-config')
 

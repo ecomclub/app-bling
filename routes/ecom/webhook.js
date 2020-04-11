@@ -10,7 +10,6 @@ const getConfig = require(process.cwd() + '/lib/store-api/get-config')
 // mysql abstract
 const database = require('../../lib/database')
 
-// 
 const SKIP_TRIGGER_NAME = 'SkipTrigger'
 const ECHO_SUCCESS = 'SUCCESS'
 const ECHO_SKIP = 'SKIP'
