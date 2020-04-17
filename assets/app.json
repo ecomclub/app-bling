@@ -11,21 +11,15 @@
   "authentication": true,
   "auth_callback_uri": "https://bling.ecomplus.biz/ecom/auth-callback",
   "auth_scope": {
-    "orders": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "orders/hidden_metafields": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "orders/items": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "orders/loyalty_points": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "orders/metafields": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "orders/payments_history": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "orders/shipping_lines": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "orders/transactions": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "procedures": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "products": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "products/categories": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "products/inventory_records": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "products/price": ["GET", "POST", "PUT", "PATCH"],
-    "products/quantity": ["GET", "POST", "PUT", "PATCH"],
-    "products/variations": ["GET", "POST", "PUT", "PATCH"]
+    "orders": ["GET", "POST","PATCH"],
+    "orders/hidden_metafields": ["POST"],
+    "orders/payments_history": ["GET", "PATCH"],
+    "orders/shipping_lines": ["GET", "PATCH"],
+    "orders/transactions": ["GET", "PATCH"],
+    "procedures": ["POST"],
+    "products": ["GET", "POST", "PATCH"],
+    "products/quantity": ["PATCH"],
+    "products/variations": ["GET", "POST","PATCH"]
   },
   "admin_settings": {
     "bling_api_key": {
