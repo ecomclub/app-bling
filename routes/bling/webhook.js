@@ -8,6 +8,7 @@ const logger = require('console-files')
 const Bling = require('bling-erp-sdk')
 // ecomClinet
 const ecomClient = require('@ecomplus/client')
+let processQueue = []
 
 module.exports = (appSdk) => {
   return (req, res) => {
@@ -198,108 +199,113 @@ module.exports = (appSdk) => {
             let resource = `/orders.json?number=${trigger.numero}&fields=_id,number,status,financial_status,fulfillment_status,shipping_lines,buyers,items`
             let method = 'GET'
 
-            appSdk
-              .apiRequest(storeId, resource, method)
-              .then(resp => resp.response.data.result)
-              .then(result => {
-                let promises = []
-                let order = result[0]
+            if (processQueue.indexOf(trigger.numero) === -1) {
+              setTimeout(() => {
+                appSdk
+                  .apiRequest(storeId, resource, method)
+                  .then(resp => resp.response.data.result)
+                  .then(result => {
+                    let promises = []
+                    let order = result[0]
 
-                // invoices?
-                if (trigger.nota &&
-                  sync &&
-                  sync.bling &&
-                  sync.bling.invoices &&
-                  sync.bling.invoices === true &&
-                  (typeof order === 'object')
-                ) {
-                  const promise = new Promise(resolve => {
-                    // verifica se a nota ja existe na order
-                    const shippingInvoices = order.shipping_lines.find(shippin => shippin.invoices)
-                    let match
-                    if (shippingInvoices) {
-                      match = shippingInvoices.invoices.find(invoice => invoice.number === trigger.nota.chaveAcesso)
-                    }
-
-                    if (!shippingInvoices || !match) {
-                      const update = [
-                        {
-                          number: data.nota.chaveAcesso,
-                          serial_number: data.nota.numero,
-                          access_key: data.nota.chaveAcesso
+                    // invoices?
+                    if (trigger.nota &&
+                      sync &&
+                      sync.bling &&
+                      sync.bling.invoices &&
+                      sync.bling.invoices === true &&
+                      (typeof order === 'object')
+                    ) {
+                      const promise = new Promise(resolve => {
+                        // verifica se a nota ja existe na order
+                        const shippingInvoices = order.shipping_lines.find(shippin => shippin.invoices)
+                        let match
+                        if (shippingInvoices) {
+                          match = shippingInvoices.invoices.find(invoice => invoice.number === trigger.nota.chaveAcesso)
                         }
-                      ]
-                      resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
-                      appSdk.apiRequest(storeId, resource, 'PATCH', { invoices: update })
-                    }
-                    resolve()
-                  })
-                  promises.push(promise)
-                }
 
-                // update financial_status
-                if (sync &&
-                  sync.bling &&
-                  sync.bling.financial_status &&
-                  sync.bling.financial_status === true
-                ) {
-                  if ((order && !order.financial_status) || (order.financial_status.current !== parseStatus(trigger.situacao))) {
-                    if (parseStatus(trigger.situacao) !== 'unknown') {
-                      const update = {
-                        financial_status: {
-                          current: parseStatus(trigger.situacao)
+                        if (!shippingInvoices || !match) {
+                          const update = [
+                            {
+                              number: data.nota.chaveAcesso,
+                              serial_number: data.nota.numero,
+                              access_key: data.nota.chaveAcesso
+                            }
+                          ]
+                          resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
+                          appSdk.apiRequest(storeId, resource, 'PATCH', { invoices: update })
                         }
-                      }
-                      const resource = `/orders/${order._id}.json`
-                      const promise = appSdk.apiRequest(storeId, resource, 'PATCH', update)
+                        resolve()
+                      })
                       promises.push(promise)
                     }
-                  }
-                }
 
-                //
-                if (sync &&
-                  sync.bling &&
-                  sync.bling.shipping_lines &&
-                  sync.bling.shipping_lines === true &&
-                  (typeof order === 'object')
-                ) {
-                  if (trigger.transporte && trigger.transporte.volumes && order.shipping_lines) {
-                    let codes = []
+                    // update financial_status
+                    if (sync &&
+                      sync.bling &&
+                      sync.bling.financial_status &&
+                      sync.bling.financial_status === true
+                    ) {
+                      if ((order && !order.financial_status) || (order.financial_status.current !== parseStatus(trigger.situacao.toLowerCase()))) {
+                        if (parseStatus(trigger.situacao) !== 'unknown') {
+                          const update = {
+                            financial_status: {
+                              current: parseStatus(trigger.situacao)
+                            }
+                          }
+                          const resource = `/orders/${order._id}.json`
+                          const promise = appSdk.apiRequest(storeId, resource, 'PATCH', update)
+                          promises.push(promise)
+                        }
+                      }
+                    }
 
-                    trigger.transporte.volumes.forEach(volume => {
-                      if (volume.volume && volume.volume.codigoRastreamento) {
-                        codes.push({
-                          codigo: volume.volume.codigoRastreamento,
-                          tag: volume.volume.servico
+                    //
+                    if (sync &&
+                      sync.bling &&
+                      sync.bling.shipping_lines &&
+                      sync.bling.shipping_lines === true &&
+                      (typeof order === 'object')
+                    ) {
+                      if (trigger.transporte && trigger.transporte.volumes && order.shipping_lines) {
+                        let codes = []
+
+                        trigger.transporte.volumes.forEach(volume => {
+                          if (volume.volume && volume.volume.codigoRastreamento) {
+                            codes.push({
+                              codigo: volume.volume.codigoRastreamento,
+                              tag: volume.volume.servico
+                            })
+                          }
                         })
+
+                        if (codes.length) {
+                          const updateCodes = []
+                          codes.forEach(code => {
+                            updateCodes.push({
+                              code: code.codigo,
+                              tag: code.tag.replace(' ', '').toLowerCase()
+                            })
+                          })
+                          const resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
+                          const promise = appSdk.apiRequest(storeId, resource, 'PATCH', { tracking_codes: updateCodes })
+                          promises.push(promise)
+                        }
+                      }
+                    }
+
+                    Promise.all(promises).then(() => {
+                      logger.log(`Pedido ${trigger.numero} alterado via bling | store #${storeId}`)
+                    }).catch(e => {
+                      if (e.response && e.response.data) {
+                        logger.error(`Error ao atualizar o pedido ${trigger.numero} da loja ${storeId} | ${JSON.stringify(e.response.data)}`)
                       }
                     })
-
-                    if (codes.length) {
-                      const updateCodes = []
-                      codes.forEach(code => {
-                        updateCodes.push({
-                          code: code.codigo,
-                          tag: code.tag.replace(' ', '').toLowerCase()
-                        })
-                      })
-                      const resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
-                      const promise = appSdk.apiRequest(storeId, resource, 'PATCH', { tracking_codes: updateCodes })
-                      promises.push(promise)
-                    }
-                  }
-                }
-
-                Promise.all(promises).then(() => {
-                  logger.log(`Pedido ${trigger.numero} alterado via bling | store #${storeId}`)
-                }).catch(e => {
-                  if (e.response && e.response.data) {
-                    logger.error(`Error ao atualizar o pedido ${trigger.numero} da loja ${storeId} | ${JSON.stringify(e.response.data)}`)
-                  }
-                })
-              })
-              .catch(e => logger.error('BlingUpdateErr', e))
+                  })
+                  .catch(e => logger.error('BlingUpdateErr', e))
+                processQueue.splice(processQueue.indexOf(trigger.numero), 1)
+              }, Math.random() * (5000 - 1000) + 1000)
+            }
           }
         }
         // all done
@@ -329,15 +335,14 @@ module.exports = (appSdk) => {
 
 const parseStatus = (status) => {
   switch (status) {
-    case 'Em aberto':
+    case 'em aberto':
+    case 'em andamento':
+    case 'em digitação':
       return 'pending' // financial_status.current
-    case 'Em Andamento':
-    case 'Em digitação':
-      return 'unknown'
-    case 'Venda agenciada':
-    case 'Atendido': // financial_status.current
+    case 'venda agenciada':
+    case 'atendido': // financial_status.current  
       return 'paid'
-    case 'Cancelado': // financial_status.current
+    case 'cancelado': // financial_status.current
       return 'voided'
   }
 }
