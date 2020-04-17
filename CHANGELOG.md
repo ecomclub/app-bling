@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/ecomclub/app-bling/compare/v1.2.0...v1.3.0) (2020-04-17)
+
+
+### Features
+
+* **webhook:** queue to prevent processing the same body several times ([0513c4d](https://github.com/ecomclub/app-bling/commit/0513c4d0853552983276cd5360c01178cc4ace16))
+* **webhook:** queue to prevent processing the same body several times ([dcec4c3](https://github.com/ecomclub/app-bling/commit/dcec4c3c35b75ac72e789781dc588b61bbb3e2b0))
+
 ## [1.2.0](https://github.com/ecomclub/app-bling/compare/v0.1.0...v1.2.0) (2020-04-11)
 
 
