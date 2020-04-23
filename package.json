@@ -8,7 +8,8 @@
     "start": "node main.js",
     "local": "ECOMCLIENT_NOTIMEOUT=true DB_NAME=bling ECOM_AUTH_DB=/var/dbs/bling.sqlite LOGGER_OUTPUT=/var/log/nodejs/bling.out LOGGER_ERRORS=/var/log/nodejs/bling.error LOGGER_FATAL_ERRORS=/var/log/nodejs/_stderr nodemon --inspect main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "standard-version"
+    "release": "standard-version",
+    "publish:market": "node ./scripts/market-publication.js"
   },
   "dependencies": {
     "@ecomplus/client": "^2.0.2",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
+    "dotenv": "^8.2.0",
     "husky": "^4.2.5",
     "standard": "*",
     "standard-version": "^7.1.0"
