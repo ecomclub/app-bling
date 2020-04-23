@@ -1,0 +1,104 @@
+{
+  "app_id": 1247,
+  "state": "active",
+  "title": "Bling ERP",
+  "slug": "bling",
+  "paid": false,
+  "version": "1.1.6",
+  "type": "external",
+  "script_uri": "https://bling.ecomplus.biz",
+  "status": "active",
+  "authentication": true,
+  "auth_callback_uri": "https://bling.ecomplus.biz/ecom/auth-callback",
+  "auth_scope": {
+    "orders": ["GET", "POST", "PATCH"],
+    "orders/payments_history": ["PATCH"],
+    "orders/shipping_lines": ["PATCH"],
+    "procedures": ["POST"],
+    "products": ["GET", "POST", "PATCH"],
+    "products/quantity": ["PATCH"],
+    "products/variations": ["GET", "POST", "PATCH"]
+  },
+  "admin_settings": {
+    "bling_api_key": {
+      "schema": {
+        "type": "string",
+        "maxLength": 255,
+        "title": "Bling Api KEY",
+        "description": "Chave de acesso para recursos da API"
+      },
+      "hide": true
+    },
+    "bling_loja_id": {
+      "schema": {
+        "type": "string",
+        "maxLength": 255,
+        "title": "Bling loja id",
+        "description": "Configuração opcional, caso informado, todos os produtos enviados da E-Com Plus para o Bling serão viculados a loja informada."
+      },
+      "hide": true
+    },
+    "sync": {
+      "schema": {
+        "type": "object",
+        "title": "Sincronização entre os serviços",
+        "required": ["ecom", "bling"],
+        "properties": {
+          "ecom": {
+            "type": "object",
+            "title": "Configurações E-Com Plus",
+            "description": "Configuração de sincronizações da E-Com Plus",
+            "required": ["products", "orders"],
+            "properties": {
+              "products": {
+                "type": "boolean",
+                "title": "Produtos E-Com Plus",
+                "description": "Enviar todos os produtos da E-Com Plus pra o Bling automaticamente.",
+                "default": false
+              },
+              "orders": {
+                "type": "boolean",
+                "title": "Pedidos E-Com Plus",
+                "description": "Enviar todos os pedidos da E-Com Plus pra o Tiny automáticamente.",
+                "default": false
+              }
+            }
+          },
+          "bling": {
+            "type": "object",
+            "title": "Configurações Bling",
+            "description": "Configuralçies de sincronizações do Tiny",
+            "required": ["invoices", "financial_status"],
+            "properties": {
+              "invoices": {
+                "type": "boolean",
+                "title": "Notas Fiscais de pedidos E-Com Plus",
+                "description": "Envia nota fiscais emitidas no Bling para E-Com Plus.",
+                "default": false
+              },
+              "financial_status": {
+                "type": "boolean",
+                "title": "Situação de Pedidos E-Com Plus",
+                "description": "Atualizar situação do pedido na E-Com Plus sempre que for alterado no Bling.",
+                "default": false
+              },
+              "stock": {
+                "type": "boolean",
+                "title": "Estoque de produtos E-Com Plus",
+                "description": "Atualizar situação do pedido na E-Com Plus sempre que for alterado no Bling.",
+                "default": false
+              },
+              "shipping_lines": {
+                "type": "boolean",
+                "title": "Códigos de Rastreio",
+                "description": "Atualizar código de rastreio nos pedidos sempre que o envio for estiver a cargo do Bling.",
+                "default": false
+              }
+            }
+          }
+        }
+      },
+      "hide": false
+    }
+  }
+}
