@@ -59,7 +59,7 @@
               "orders": {
                 "type": "boolean",
                 "title": "Pedidos E-Com Plus",
-                "description": "Enviar todos os pedidos da E-Com Plus pra o Tiny automáticamente.",
+                "description": "Enviar todos os pedidos da E-Com Plus pra o Bling automáticamente.",
                 "default": false
               }
             }
@@ -67,7 +67,7 @@
           "bling": {
             "type": "object",
             "title": "Configurações Bling",
-            "description": "Configuralçies de sincronizações do Tiny",
+            "description": "Configuralçies de sincronizações do Bling",
             "required": ["invoices", "financial_status"],
             "properties": {
               "invoices": {
