@@ -67,7 +67,7 @@
           "bling": {
             "type": "object",
             "title": "Configurações Bling",
-            "description": "Configuralçies de sincronizações do Bling",
+            "description": "Configuração de sincronizações do Bling",
             "required": ["invoices", "financial_status"],
             "properties": {
               "invoices": {
