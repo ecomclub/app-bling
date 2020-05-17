@@ -209,6 +209,18 @@ module.exports = (appSdk) => {
                       }
                     })
                 })
+
+                .catch(error => {
+                  const err = new Error(`Erro no callback de estoque para #${storeId}`)
+                  err.original = error.message
+                  if (error.response) {
+                    if (error.response.data) {
+                      err.data = JSON.stringify(error.response.data)
+                    }
+                    err.status = error.response.status
+                  }
+                  logger.error(err)
+                })
             }
           } else if (retorno.pedidos) {
             const { sync } = configObj
