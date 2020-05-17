@@ -124,12 +124,13 @@ module.exports = (appSdk) => {
               })
 
               .catch(e => {
-                console.error(e)
-                let erro = 'Unexpected error'
+                const err = new Error(`SyncProductToEcomErr: ${e.message}`)
+                err.storeId = storeId
                 if (e.response && e.response.data) {
-                  erro = JSON.stringify(e.response.data)
+                  err.data = JSON.stringify(e.response.data)
                 }
-                logger.error('SyncProductToEcomErr', erro)
+                err.current = body[current]
+                logger.error(err)
                 nextProduct()
               })
           }
