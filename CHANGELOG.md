@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.3](https://github.com/ecomplus/app-bling/compare/v1.3.2...v1.3.3) (2020-05-17)
+
+
+### Bug Fixes
+
+* **bling-webhook:** fix debugging stock callback errors ([45dca92](https://github.com/ecomplus/app-bling/commit/45dca9289a8f6c4ad8f3bc7a65d31209ba46db42))
+
 ### [1.3.2](https://github.com/ecomplus/app-bling/compare/v1.3.1...v1.3.2) (2020-05-17)
 
 
