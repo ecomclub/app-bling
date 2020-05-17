@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/ecomplus/app-bling/compare/v1.3.0...v1.3.1) (2020-05-17)
+
+
+### Bug Fixes
+
+* **application.js:** app name ([730039b](https://github.com/ecomplus/app-bling/commit/730039ba870780d620714e1216344f569bb03ad5))
+* **bling-callback:** better error debug ([77bfd84](https://github.com/ecomplus/app-bling/commit/77bfd8465a03c395b789072abd9a60da724545c4))
+* **bling-webhook:** fix handling bling order webhooks ([cdd2586](https://github.com/ecomplus/app-bling/commit/cdd25865e2d34c38e0b4ee2dbcd37ace077bc1fe))
+* **deps:** replace ecomplus-app-sdk with @ecomplus/application-sdk ([645d627](https://github.com/ecomplus/app-bling/commit/645d6271d8a59d352d486bdde28ea108990b21f7))
+
 ## [1.3.0](https://github.com/ecomclub/app-bling/compare/v1.2.0...v1.3.0) (2020-04-17)
 
 
