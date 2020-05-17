@@ -6,7 +6,7 @@ const logger = require('console-files')
 module.exports = (appSdk) => {
   return (req, res) => {
     // handle callback with E-Com Plus app SDK
-    // https://github.com/ecomclub/ecomplus-app-sdk
+    // https://github.com/ecomplus/application-sdk
     appSdk.handleCallback(req.storeId, req.body)
 
       .then(({ isNew, authenticationId }) => {
@@ -20,7 +20,7 @@ module.exports = (appSdk) => {
           logger.error(err)
         }
         res.status(500)
-        let { message } = err
+        const { message } = err
         res.send({
           error: 'auth_callback_error',
           message
