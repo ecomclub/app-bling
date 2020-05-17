@@ -14,7 +14,11 @@ const processQueue = []
 module.exports = (appSdk) => {
   return (req, res) => {
     const { storeId } = req.query
-    const { data } = req.body
+    let { data } = req.body
+    if (!data) {
+      return res.sendStatus(400)
+    }
+    logger.log(`Bling webhook #${storeId}`)
 
     // get app configured options
     getConfig({ appSdk, storeId }, true)
@@ -24,118 +28,172 @@ module.exports = (appSdk) => {
             apiKey: configObj.bling_api_key,
             lojaId: configObj.bling_loja_id
           }
-
           const bling = new Bling(blingSettings)
 
-          let body
-
-          try {
-            body = JSON.parse(data)
-          } catch (err) {
-            logger.error('ParseBodyErr', err)
+          if (typeof data === 'string') {
+            try {
+              data = JSON.parse(data)
+            } catch (e) {
+              // ignore invalid JSON
+            }
           }
-          const { retorno } = body
-          if (retorno.estoques &&
+          if (!data || !data.retorno) {
+            return res.sendStatus(400)
+          }
+          const { retorno } = data
+
+          if (
+            Array.isArray(retorno.estoques) &&
+            retorno.estoques[0] &&
             configObj.sync &&
             configObj.sync.bling &&
-            configObj.sync.bling.stock &&
-            configObj.sync.bling.stock === true
+            configObj.sync.bling.stock
           ) {
             // update product stock
             // ecomplus-api
             const trigger = retorno.estoques[0].estoque
 
-            return bling
-              .produtos
-              .getById(trigger.codigo)
+            if (trigger) {
+              logger.log(`Estoque #${storeId} ${trigger.codigo}`)
+              bling.produtos.getById(trigger.codigo)
+                .then(data => {
+                  const result = JSON.parse(data)
+                  const { produtos } = result.retorno
+                  if (produtos && Array.isArray(produtos) && produtos[0] && produtos[0].produto) {
+                    return produtos[0].produto
+                  } else {
+                    // todo
+                  }
+                })
 
-              .then(data => {
-                const result = JSON.parse(data)
-                const { produtos } = result.retorno
-                if (produtos && Array.isArray(produtos) && produtos[0] && produtos[0].produto) {
-                  return produtos[0].produto
-                } else {
-                  // todo
-                }
-              })
+                .then(produto => {
+                  let sku
+                  if (!produto.codigoPai) {
+                    // produto
+                    sku = produto.codigo
+                  } else {
+                    sku = produto.codigoPai
+                  }
 
-              .then(produto => {
-                let sku
-                if (!produto.codigoPai) {
-                  // produto
-                  sku = produto.codigo
-                } else {
-                  sku = produto.codigoPai
-                }
+                  return ecomClient
+                    .store({
+                      url: `/products.json?sku=${sku}`,
+                      storeId
+                    })
 
-                return ecomClient
-                  .store({
-                    url: `/products.json?sku=${sku}`,
-                    storeId
-                  })
+                    .then(({ data }) => {
+                      const { result } = data
+                      if (result.length) {
+                        const product = result.find(product => product.sku === sku)
+                        let url = `/products/${product._id}.json`
 
-                  .then(({ data }) => {
-                    const { result } = data
-                    if (result.length) {
-                      const product = result.find(product => product.sku === sku)
-                      let url = `/products/${product._id}.json`
-
-                      return ecomClient
-                        .store({ url, storeId })
-                        .then(({ data }) => {
-                          let promise
-                          if (!produto.codigoPai) {
-                            // produto
-                            if (data.quantity !== produto.estoqueAtual) {
-                              const body = {
-                                quantity: Math.sign(produto.estoqueAtual) === -1 ? 0 : produto.estoqueAtual
-                              }
-                              promise = appSdk.apiRequest(storeId, url, 'PATCH', body)
-                            }
-                          } else {
-                            // variations
-                            const variation = data.variations.find(variation => variation.sku === produto.codigo)
-                            if (variation) {
-                              // variação existe na ecomplus
-                              if (variation.quantity !== produto.estoqueAtual) {
-                                url = `/products/${product._id}/variations/${variation._id}.json`
+                        return ecomClient
+                          .store({ url, storeId })
+                          .then(({ data }) => {
+                            let promise
+                            if (!produto.codigoPai) {
+                              // produto
+                              if (data.quantity !== produto.estoqueAtual) {
                                 const body = {
                                   quantity: Math.sign(produto.estoqueAtual) === -1 ? 0 : produto.estoqueAtual
                                 }
                                 promise = appSdk.apiRequest(storeId, url, 'PATCH', body)
                               }
                             } else {
-                              // variação nao existe
-                              // inserir?
-                              return bling
-                                .produtos
-                                .getById(sku)
-
-                                .then(resp => {
-                                  const result = JSON.parse(resp)
-                                  const { produtos } = result.retorno
-                                  if (
-                                    produtos &&
-                                    Array.isArray(produtos) &&
-                                    produtos[0] &&
-                                    produtos[0].produto
-                                  ) {
-                                    return produtos[0].produto
-                                  } else {
-                                    // todo
+                              // variations
+                              const variation = data.variations
+                                .find(variation => variation.sku === produto.codigo)
+                              if (variation) {
+                                // variação existe na ecomplus
+                                if (variation.quantity !== produto.estoqueAtual) {
+                                  url = `/products/${product._id}/variations/${variation._id}.json`
+                                  const body = {
+                                    quantity: Math.sign(produto.estoqueAtual) === -1 ? 0 : produto.estoqueAtual
                                   }
-                                })
+                                  promise = appSdk.apiRequest(storeId, url, 'PATCH', body)
+                                }
+                              } else {
+                                // variação nao existe
+                                // inserir?
+                                return bling
+                                  .produtos
+                                  .getById(sku)
 
-                                .then(produto => {
-                                  const match = produto.variacoes
-                                    .find(variacao => variacao.variacao.codigo === trigger.codigo)
-                                  if (match) {
-                                    const variacaoTipo = match.variacao.nome.split(':')[0]
-                                    const variacaoNome = match.variacao.nome.split(':')[1]
+                                  .then(resp => {
+                                    const result = JSON.parse(resp)
+                                    const { produtos } = result.retorno
+                                    if (
+                                      produtos &&
+                                      Array.isArray(produtos) &&
+                                      produtos[0] &&
+                                      produtos[0].produto
+                                    ) {
+                                      return produtos[0].produto
+                                    } else {
+                                      // todo
+                                    }
+                                  })
+
+                                  .then(produto => {
+                                    const match = produto.variacoes
+                                      .find(variacao => variacao.variacao.codigo === trigger.codigo)
+                                    if (match) {
+                                      const variacaoTipo = match.variacao.nome.split(':')[0]
+                                      const variacaoNome = match.variacao.nome.split(':')[1]
+                                      const body = {
+                                        name: produto.descricao + ' / ' + variacaoNome,
+                                        sku: trigger.codigo,
+                                        quantity: match.variacao.estoqueAtual
+                                      }
+                                      body.specifications = {}
+                                      body.specifications[variacaoTipo] = [
+                                        {
+                                          text: variacaoNome
+                                        }
+                                      ]
+
+                                      url = `/products/${product._id}/variations.json`
+                                      return appSdk.apiRequest(storeId, url, 'POST', body)
+                                    }
+                                  })
+                              }
+                            }
+                            return promise.then(() => {
+                              logger.log(`#${storeId} ${sku}: ${data.quantity} => ${produto.estoqueAtual}`)
+                            })
+                          })
+                      } else {
+                        const ecomplusProductSchema = require('./../../lib/schemas/ecomplus-products')
+                        return bling
+                          .produtos
+                          .getById(sku)
+
+                          .then(data => {
+                            const result = JSON.parse(data)
+                            const { produtos } = result.retorno
+                            if (produtos && Array.isArray(produtos) && produtos[0] && produtos[0].produto) {
+                              return produtos[0].produto
+                            } else {
+                              // todo
+                            }
+                          })
+
+                          .then(produto => {
+                            const body = ecomplusProductSchema(produto)
+                            let resource = '/products.json'
+                            return appSdk
+                              .apiRequest(storeId, resource, 'POST', body)
+
+                              .then(resp => {
+                                if (!produto.codigoPai && produto.variacoes.length) {
+                                  resource = `/products/${resp.response.data._id}/variations.json`
+                                  produto.variacoes.forEach(variacao => {
+                                    const variacaoTipo = variacao.variacao.nome.split(':')[0]
+                                    const variacaoNome = variacao.variacao.nome.split(':')[1]
                                     const body = {
                                       name: produto.descricao + ' / ' + variacaoNome,
-                                      sku: trigger.codigo,
-                                      quantity: match.variacao.estoqueAtual
+                                      sku: variacao.variacao.codigo,
+                                      quantity: variacao.variacao.estoqueAtual
                                     }
                                     body.specifications = {}
                                     body.specifications[variacaoTipo] = [
@@ -143,64 +201,15 @@ module.exports = (appSdk) => {
                                         text: variacaoNome
                                       }
                                     ]
-
-                                    url = `/products/${product._id}/variations.json`
-                                    return appSdk.apiRequest(storeId, url, 'POST', body)
-                                  }
-                                })
-                            }
-                          }
-                          return promise.then(() => {
-                            logger.log(`#${storeId} estoque ${sku}: ${data.quantity} => ${produto.estoqueAtual}`)
+                                    return appSdk.apiRequest(storeId, resource, 'POST', body)
+                                  })
+                                }
+                              })
                           })
-                        })
-                    } else {
-                      const ecomplusProductSchema = require('./../../lib/schemas/ecomplus-products')
-                      return bling
-                        .produtos
-                        .getById(sku)
-
-                        .then(data => {
-                          const result = JSON.parse(data)
-                          const { produtos } = result.retorno
-                          if (produtos && Array.isArray(produtos) && produtos[0] && produtos[0].produto) {
-                            return produtos[0].produto
-                          } else {
-                            // todo
-                          }
-                        })
-
-                        .then(produto => {
-                          const body = ecomplusProductSchema(produto)
-                          let resource = '/products.json'
-                          return appSdk
-                            .apiRequest(storeId, resource, 'POST', body)
-
-                            .then(resp => {
-                              if (!produto.codigoPai && produto.variacoes.length) {
-                                resource = `/products/${resp.response.data._id}/variations.json`
-                                produto.variacoes.forEach(variacao => {
-                                  const variacaoTipo = variacao.variacao.nome.split(':')[0]
-                                  const variacaoNome = variacao.variacao.nome.split(':')[1]
-                                  const body = {
-                                    name: produto.descricao + ' / ' + variacaoNome,
-                                    sku: variacao.variacao.codigo,
-                                    quantity: variacao.variacao.estoqueAtual
-                                  }
-                                  body.specifications = {}
-                                  body.specifications[variacaoTipo] = [
-                                    {
-                                      text: variacaoNome
-                                    }
-                                  ]
-                                  return appSdk.apiRequest(storeId, resource, 'POST', body)
-                                })
-                              }
-                            })
-                        })
-                    }
-                  })
-              })
+                      }
+                    })
+                })
+            }
           } else if (retorno.pedidos) {
             const { sync } = configObj
             // update orders
@@ -233,9 +242,9 @@ module.exports = (appSdk) => {
                           if (!shippingInvoices || !match) {
                             const update = [
                               {
-                                number: data.nota.chaveAcesso,
-                                serial_number: data.nota.numero,
-                                access_key: data.nota.chaveAcesso
+                                number: trigger.nota.numero,
+                                serial_number: trigger.nota.numero,
+                                access_key: trigger.nota.chaveAcesso
                               }
                             ]
                             resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
