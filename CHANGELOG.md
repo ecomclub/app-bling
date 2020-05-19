@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.5](https://github.com/ecomplus/app-bling/compare/v1.3.4...v1.3.5) (2020-05-19)
+
+
+### Bug Fixes
+
+* **bling-callback:** prettier code, stop creating (POST) here ([d6a55c1](https://github.com/ecomplus/app-bling/commit/d6a55c1a8a6b4233715fa513650bb7c04ce289bf))
+
 ### [1.3.4](https://github.com/ecomplus/app-bling/compare/v1.3.3...v1.3.4) (2020-05-19)
 
 
