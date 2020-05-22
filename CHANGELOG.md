@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.7](https://github.com/ecomplus/app-bling/compare/v1.3.6...v1.3.7) (2020-05-22)
+
+
+### Bug Fixes
+
+* **products.js:** send array of imagens ([8f784de](https://github.com/ecomplus/app-bling/commit/8f784dea857d7bba9ea5a1f1b2060ef81810d0ba))
+
 ### [1.3.6](https://github.com/ecomplus/app-bling/compare/v1.3.0...v1.3.6) (2020-05-22)
 
 
