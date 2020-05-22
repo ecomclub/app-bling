@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.6](https://github.com/ecomplus/app-bling/compare/v1.3.0...v1.3.6) (2020-05-22)
+
+
+### Bug Fixes
+
+* **application.js:** app name ([730039b](https://github.com/ecomplus/app-bling/commit/730039ba870780d620714e1216344f569bb03ad5))
+* **bling-callback:** better error debug ([77bfd84](https://github.com/ecomplus/app-bling/commit/77bfd8465a03c395b789072abd9a60da724545c4))
+* **bling-callback:** prettier code, stop creating (POST) here ([d6a55c1](https://github.com/ecomplus/app-bling/commit/d6a55c1a8a6b4233715fa513650bb7c04ce289bf))
+* **bling-callback:** supporting multiple stock changes, debug axios req ([01c74d0](https://github.com/ecomplus/app-bling/commit/01c74d0961043a0e550c4aa2a07ec0333064ad16))
+* **bling-webhook:** debug stock callbacks, ensure res.send ([badfcde](https://github.com/ecomplus/app-bling/commit/badfcde4ac9732fdbda802e96d13a32d5c7e3d07))
+* **bling-webhook:** fix debugging stock callback errors ([45dca92](https://github.com/ecomplus/app-bling/commit/45dca9289a8f6c4ad8f3bc7a65d31209ba46db42))
+* **bling-webhook:** fix handling bling order webhooks ([cdd2586](https://github.com/ecomplus/app-bling/commit/cdd25865e2d34c38e0b4ee2dbcd37ace077bc1fe))
+* **deps:** replace ecomplus-app-sdk with @ecomplus/application-sdk ([645d627](https://github.com/ecomplus/app-bling/commit/645d6271d8a59d352d486bdde28ea108990b21f7))
+* checking only bling_api_key in sending the products ([355cd82](https://github.com/ecomplus/app-bling/commit/355cd8229abe345834bba71c63b7d06ae7df67fc))
+
 ### [1.3.5](https://github.com/ecomplus/app-bling/compare/v1.3.4...v1.3.5) (2020-05-19)
 
 
