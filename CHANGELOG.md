@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.8](https://github.com/ecomplus/app-bling/compare/v1.3.7...v1.3.8) (2020-06-02)
+
+
+### Bug Fixes
+
+* **sent-to-bling:** checking only bling_api_key ([876c0d1](https://github.com/ecomplus/app-bling/commit/876c0d151669e2eaa145951407e6910eb2c77a24))
+
 ### [1.3.7](https://github.com/ecomplus/app-bling/compare/v1.3.6...v1.3.7) (2020-05-22)
 
 
