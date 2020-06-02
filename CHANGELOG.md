@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.9](https://github.com/ecomplus/app-bling/compare/v1.3.8...v1.3.9) (2020-06-02)
+
+
+### Bug Fixes
+
+* **orders.js:** sending buyer\'s full name ([793bf76](https://github.com/ecomplus/app-bling/commit/793bf7662e8d7a069b52aca5e6bfe540378feb99))
+* **products.js:** using product name ([3202e14](https://github.com/ecomplus/app-bling/commit/3202e144b4fbb83695157655dc55c02e690b200f))
+
 ### [1.3.8](https://github.com/ecomplus/app-bling/compare/v1.3.7...v1.3.8) (2020-06-02)
 
 
