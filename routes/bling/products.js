@@ -3,9 +3,6 @@
 const logger = require('console-files')
 
 // bling client
-const Bling = require('bling-erp-sdk')
-
-// bling client
 const blingClient = require('../../lib/bling/client')
 
 // read configured E-Com Plus app data
