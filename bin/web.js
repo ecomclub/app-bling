@@ -63,6 +63,7 @@ ecomAuth.then(appSdk => {
   // ecomplus
   router.post('/ecomplus/products', require('./../routes/ecom/products')(appSdk))
   router.post('/ecomplus/orders', require('./../routes/ecom/orders')(appSdk))
+  router.post('/ecomplus/stock', require('./../routes/ecom/stock')(appSdk))
 
   app.use(express.static('assets'))
   router.get('/app/', function (req, res) {
