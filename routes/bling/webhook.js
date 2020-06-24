@@ -7,7 +7,6 @@ const ECHO_SUCCESS = 'SUCCESS'
 const ECHO_SKIP = 'SKIP'
 const ECHO_API_ERROR = 'STORE_API_ERR'
 const logger = require('console-files')
-const Bling = require('bling-erp-sdk')
 const { randomObjectId } = require('@ecomplus/utils')
 const processQueue = []
 
@@ -23,13 +22,7 @@ module.exports = appSdk => {
     // get app configured options
     getConfig({ appSdk, storeId }, true)
       .then(configObj => {
-        if (configObj.bling_api_key) {
-          const blingSettings = {
-            apiKey: configObj.bling_api_key,
-            lojaId: configObj.bling_loja_id
-          }
-          const bling = new Bling(blingSettings)
-
+        if (configObj.bling_api_key) {          
           if (typeof data === 'string') {
             try {
               data = JSON.parse(data)
@@ -52,7 +45,8 @@ module.exports = appSdk => {
             retorno.estoques.forEach((estoque, i) => {
               if (estoque && estoque.estoque) {
                 setTimeout(() => {
-                  handleBlingCallback(appSdk, storeId, bling, estoque.estoque)
+                  const apiKey = configObj.bling_api_key
+                  handleBlingCallback(appSdk, storeId, apiKey, estoque.estoque)
                 }, 1000 * i)
               }
             })

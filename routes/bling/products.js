@@ -5,6 +5,9 @@ const logger = require('console-files')
 // bling client
 const Bling = require('bling-erp-sdk')
 
+// bling client
+const blingClient = require('../../lib/bling/client')
+
 // read configured E-Com Plus app data
 const getConfig = require(process.cwd() + '/lib/store-api/get-config')
 
@@ -20,7 +23,7 @@ module.exports = (appSdk) => {
       res.status(401)
       return res.send({
         error: 'Unauthorized',
-        message: 'Store id não encontrado no header nem nos paramentros da url ou inválido.'
+        message: 'Missing store_id'
       })
     }
 
@@ -28,7 +31,7 @@ module.exports = (appSdk) => {
       res.status(400)
       return res.send({
         error: 'bad format',
-        message: 'Body precisa ser um array de sku`s'
+        message: 'Body must be a arrays of sku`s'
       })
     }
 
@@ -40,40 +43,34 @@ module.exports = (appSdk) => {
           res.status(401)
           return res.send({
             error: 'Unauthorized',
-            message: 'bling_api_key não configurada no aplicativo.'
+            message: 'Missing bling_api_key'
           })
         }
         return configObj
       })
 
       .then(configObj => {
-        const blingSettings = {
-          apiKey: configObj.bling_api_key,
-          lojaId: configObj.bling_loja_id
-        }
-
-        const bling = new Bling(blingSettings)
-
+        const apiKey = configObj.bling_api_key
         let current = 0
         const nextProduct = () => {
           current++
-          sync()
+          return sync()
         }
 
         const sync = () => {
           if (body[current]) {
-            bling
-              .produtos
-              .getById(body[current])
-
-              .then(data => {
-                const result = JSON.parse(data)
-                const { produtos } = result.retorno
+            blingClient({
+              url: `produto/${body[current]}`,
+              method: 'get',
+              apiKey
+            })
+              .then(({ data }) => {
+                const { produtos } = data.retorno
                 if (produtos && Array.isArray(produtos) && produtos[0] && produtos[0].produto) {
                   return produtos[0].produto
                 } else {
                   // todo
-                  logger.error(`Product ${body[current]} not found in bling`)
+                  throw new Error(`Product ${body[current]} not found in bling`)
                 }
               })
 
@@ -81,7 +78,7 @@ module.exports = (appSdk) => {
                 const schema = ecomplusProductSchema(produto)
                 return appSdk
                   .apiRequest(storeId, '/products.json', 'POST', schema)
-                  .then(resp => ({ data: resp.response.data, produto }))
+                  .then(({ response }) => ({ data: response.data, produto }))
               })
 
               .then(({ data, produto }) => {
@@ -98,7 +95,18 @@ module.exports = (appSdk) => {
                     for (let i = 0; i < variations.length; i++) {
                       if (variations[i] !== '') {
                         const variation = variations[i].split(':')
-                        const type = variation[0].trim().toLowerCase().replace(/[áâãà]/g, 'a').replace(/[éê]/g, 'e').replace(/[íî]/g, 'i').replace(/[óôõ]/g, 'o').replace(/[ú]/g, 'u').replace(/[ç]/g, 'c').replace(/-/g, '').replace(/\s/g, '-').replace(/[^0-9a-z-]/g, '')
+                        const type = variation[0].trim()
+                          .toLowerCase()
+                          .replace(/[áâãà]/g, 'a')
+                          .replace(/[éê]/g, 'e')
+                          .replace(/[íî]/g, 'i')
+                          .replace(/[óôõ]/g, 'o')
+                          .replace(/[ú]/g, 'u')
+                          .replace(/[ç]/g, 'c')
+                          .replace(/-/g, '')
+                          .replace(/\s/g, '-')
+                          .replace(/[^0-9a-z-]/g, '')
+
                         const name = variation[1].trim()
                         specifications[type] = [{ text: name }]
                       }
@@ -115,22 +123,24 @@ module.exports = (appSdk) => {
                     appSdk
                       .apiRequest(storeId, resource, 'POST', newVariation)
                       .catch(e => {
-                        logger.error(`Erro ao inserir nova variação no produto ${data._id} | Store ${storeId} | Erro: ${e}`)
+                        logger.error(`Variations Erro: ${data._id} | ${storeId} | Erro: ${e}`)
                       })
                   })
                 }
                 // call next product
-                nextProduct()
+                return nextProduct()
               })
 
               .catch(e => {
-                const err = new Error(`SyncProductToEcomErr: ${e.message}`)
+                //console.log(e)
+                const err = new Error('~<> Manual product synchronization failed')
+                err.error = e.message
                 err.storeId = storeId
                 if (e.response && e.response.data) {
                   err.data = JSON.stringify(e.response.data)
                 }
-                err.current = body[current]
-                logger.error(err)
+                err.product_sku = body[current]
+                logger.error('~<> ProductSyncFailed', JSON.stringify(err, undefined, 4))
                 nextProduct()
               })
           }

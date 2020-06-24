@@ -2,7 +2,7 @@
 const logger = require('console-files')
 
 // bling client
-const Bling = require('bling-erp-sdk')
+const blingClient = require('../../lib/bling/client')
 
 // read configured E-Com Plus app data
 const getConfig = require(process.cwd() + '/lib/store-api/get-config')
@@ -71,53 +71,44 @@ module.exports = (appSdk) => {
           const url = `/orders/${orderId}.json`
           return appSdk
             .apiRequest(storeId, url)
-            .then(resp => ({ data: resp.response.data, configObj }))
+            .then(resp => ({ order: resp.response.data, configObj }))
         })
 
-        .then(({ data, configObj }) => {
-          const blingClient = new Bling({ apiKey: configObj.bling_api_key })
-          if (data.financial_status) {
-            return blingClient
-              .pedidos
-              .getById(data.number)
-              .then(resp => {
-                let response
-                try {
-                  response = JSON.parse(resp)
-                } catch (error) {
-                  console.error('json parse error')
-                }
-
-                const { erros, pedidos } = response.retorno
+        .then(({ order, configObj }) => {
+          if (order.financial_status) {
+            const apiKey = configObj.bling_api_key
+            blingClient({
+              url: `pedido/${order.number}`,
+              method: 'get',
+              apiKey
+            })
+              .then(({ data }) => {
+                const { erros, pedidos } = data.retorno
                 if (!erros && Array.isArray(pedidos) && pedidos[0] && pedidos[0].pedido) {
                   const { pedido } = pedidos[0]
                   const { fields } = trigger
 
                   if ((fields && fields.includes('financial_status')) || (fields && fields.includes('fulfillment_status'))) {
                     // parse status
-                    const { current } = data.financial_status
+                    const { current } = order.financial_status
                     let blingStatus = parseEcomStatus(current)
 
-                    if (data.fulfillment_status &&
-                      data.fulfillment_status.current &&
-                      data.fulfillment_status.current === 'shipped' &&
+                    if (order.fulfillment_status &&
+                      order.fulfillment_status.current &&
+                      order.fulfillment_status.current === 'shipped' &&
                       current === 'paid'
                     ) {
                       blingStatus = 'Atendido'
                     }
 
                     if (blingStatus && (blingStatus.toLowerCase() !== pedido.situacao.toLowerCase())) {
-                      blingClient.situacao
-                        .fetch()
-                        .then(resp => {
-                          let response
-                          try {
-                            response = JSON.parse(resp)
-                          } catch (error) {
-                            console.error('json parse error')
-                          }
-
-                          const { situacoes } = response.retorno
+                      return blingClient({
+                        url: `situacao/Vendas`,
+                        method: 'get',
+                        apiKey
+                      })
+                        .then(({ data }) => {
+                          const { situacoes } = data.retorno
 
                           const situacao = situacoes.find(el => el.situacao.nome.toLowerCase() === blingStatus.toLowerCase())
 
@@ -129,10 +120,15 @@ module.exports = (appSdk) => {
                               }
                             }
 
-                            blingClient.pedidos.update(data.number, update)
-                              .then(() => logger.log(`> changed bling situação / #${storeId}`))
+                            return blingClient({
+                              url: `pedido/${order.number}`,
+                              method: 'put',
+                              apiKey,
+                              data: update
+                            })
                           }
                         })
+                        .then(() => logger.log(`> changed bling situação / #${storeId}`))
                     }
                   }
                 }
