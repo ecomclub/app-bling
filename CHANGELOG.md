@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/ecomplus/app-bling/compare/v1.3.10...v1.4.0) (2020-06-24)
+
+
+### Features
+
+* **bling:** manually sync product stock to platform ([393e55c](https://github.com/ecomplus/app-bling/commit/393e55c21e6e9be08c48650000fb5ad8194290b8))
+
+
+### Bug Fixes
+
+* cliente name ([bf44f48](https://github.com/ecomplus/app-bling/commit/bf44f48c9816c248fff09f55c28cbc179960b1f9))
+
 ### [1.3.10](https://github.com/ecomplus/app-bling/compare/v1.3.9...v1.3.10) (2020-06-24)
 
 ### [1.3.9](https://github.com/ecomplus/app-bling/compare/v1.3.8...v1.3.9) (2020-06-02)
