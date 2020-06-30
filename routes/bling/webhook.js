@@ -141,7 +141,7 @@ module.exports = appSdk => {
                             if (volume.volume && volume.volume.codigoRastreamento) {
                               codes.push({
                                 codigo: volume.volume.codigoRastreamento,
-                                tag: volume.volume.servico
+                                tag: volume.volume.servico.replace(/[^a-zA-Z0-9]/gis, '')
                               })
                             }
                           })
