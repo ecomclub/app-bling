@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://github.com/ecomplus/app-bling/compare/v1.4.0...v1.4.1) (2020-06-30)
+
+
+### Bug Fixes
+
+* preventing errors with tags from trackin_code ([21e5ac3](https://github.com/ecomplus/app-bling/commit/21e5ac30e08a09fc767709a33a68a2922f2126e4))
+
 ## [1.4.0](https://github.com/ecomplus/app-bling/compare/v1.3.10...v1.4.0) (2020-06-24)
 
 
