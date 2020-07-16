@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/ecomplus/app-bling/compare/v1.5.2...v1.6.0) (2020-07-16)
+
+
+### Features
+
+* **products:** invert product images optionally ([def00c7](https://github.com/ecomplus/app-bling/commit/def00c70fe13c0b538d74f4e34d7c899cfd4c55f))
+
 ### [1.5.2](https://github.com/ecomplus/app-bling/compare/v1.5.1...v1.5.2) (2020-07-16)
 
 
