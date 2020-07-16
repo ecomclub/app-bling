@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.2](https://github.com/ecomplus/app-bling/compare/v1.5.1...v1.5.2) (2020-07-16)
+
+
+### Bug Fixes
+
+* ignoring timeout errors ([35c6a07](https://github.com/ecomplus/app-bling/commit/35c6a0725a0e791c8cb89c191003d561b2618bde))
+
 ### [1.5.1](https://github.com/ecomplus/app-bling/compare/v1.5.0...v1.5.1) (2020-07-16)
 
 
