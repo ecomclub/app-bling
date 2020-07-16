@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/ecomplus/app-bling/compare/v1.5.0...v1.5.1) (2020-07-16)
+
+
+### Bug Fixes
+
+* **products:** sending product gtin ([00d621a](https://github.com/ecomplus/app-bling/commit/00d621a357670f69fe2911b003b8ad95e592e2c6))
+
 ## [1.5.0](https://github.com/ecomplus/app-bling/compare/v1.4.1...v1.5.0) (2020-07-16)
 
 
