@@ -4,7 +4,7 @@
   "title": "Bling ERP",
   "slug": "bling",
   "paid": false,
-  "version": "1.1.6",
+  "version": "1.4.2",
   "type": "external",
   "script_uri": "https://bling.ecomplus.biz",
   "status": "active",
@@ -93,6 +93,13 @@
                 "title": "Códigos de Rastreio",
                 "description": "Atualizar código de rastreio nos pedidos sempre que o envio for estiver a cargo do Bling.",
                 "default": false
+              },
+              "image_size_upload": {
+                "title": "Imagem dos Produtos",
+                "type": "string",
+                "description": "Definir tamanho das imagens dos produtos, por padrão todas as fotos são sincronizadas independete do tamanho, porém, é possível definir qual tamanho será sincronizado.",
+                "enum": ["Todas", "zoom", "normal", "big"],
+                "default": "Todas"
               }
             }
           }
