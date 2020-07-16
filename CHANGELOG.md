@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/ecomplus/app-bling/compare/v1.4.1...v1.5.0) (2020-07-16)
+
+
+### Features
+
+* **products:** choice of images to send, reversing the order of images ([9dcc4b4](https://github.com/ecomplus/app-bling/commit/9dcc4b4c12b83617081ac27b562aed0c0238ef4c))
+
 ### [1.4.1](https://github.com/ecomplus/app-bling/compare/v1.4.0...v1.4.1) (2020-06-30)
 
 
