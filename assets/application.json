@@ -100,6 +100,12 @@
                 "description": "Definir tamanho das imagens dos produtos, por padrão todas as fotos são sincronizadas independete do tamanho, porém, é possível definir qual tamanho será sincronizado.",
                 "enum": ["Todas", "zoom", "normal", "big"],
                 "default": "Todas"
+              },
+              "image_reverse": {
+                "type": "boolean",
+                "title": "Inverter ordem das imagens",
+                "description": "Inverter a ordem das imagens ao enviar para o Bling",
+                "default": false
               }
             }
           }
