@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.3](https://github.com/ecomplus/app-bling/compare/v1.6.2...v1.6.3) (2020-07-27)
+
+
+### Bug Fixes
+
+* **orders.js:** nome in transaporte.dados_etiqueta ([593c599](https://github.com/ecomplus/app-bling/commit/593c599b81ef773d96b856faa1cddb0620ace013))
+
 ### [1.6.2](https://github.com/ecomplus/app-bling/compare/v1.6.1...v1.6.2) (2020-07-22)
 
 ### [1.6.1](https://github.com/ecomplus/app-bling/compare/v1.6.0...v1.6.1) (2020-07-17)
