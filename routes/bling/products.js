@@ -107,29 +107,29 @@ module.exports = (appSdk) => {
                         const text = variation[1].trim()
                         let value
                         if (type === 'colors') {
-                          switch (text) {
-                            case 'Preto':
+                          switch (text.toLowerCase()) {
+                            case 'preto':
                               value = '#000000'
                               break
-                            case 'Vermelho':
+                            case 'vermelho':
                               value = '#ff0000'
                               break
-                            case 'Azul':
+                            case 'azul':
                               value = '#0000ff'
                               break
-                            case 'Branco':
+                            case 'branco':
                               value = '#ffffff'
                               break
-                            case 'Roxo':
+                            case 'roxo':
                               value = '#800080'
                               break
-                            case 'Cinza':
+                            case 'cinza':
                               value = '#808080'
                               break
-                            case 'Amarelo':
+                            case 'amarelo':
                               value = '#ffff00'
                               break
-                            case 'Rosa':
+                            case 'rosa':
                               value = '#ff00ff'
                               break
                           }
