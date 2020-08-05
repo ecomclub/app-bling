@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.6](https://github.com/ecomplus/app-bling/compare/v1.6.5...v1.6.6) (2020-08-05)
+
+
+### Bug Fixes
+
+* **orders.js:** nome in transaporte.dados_etiqueta ([a224d46](https://github.com/ecomplus/app-bling/commit/a224d466a481725edf8ce8842b21d8752d9df741))
+* restart services when throwing exception ([c77baf1](https://github.com/ecomplus/app-bling/commit/c77baf1d0cf5019199a4f17c8fa83ab4648b1484))
+
 ### [1.6.5](https://github.com/ecomplus/app-bling/compare/v1.6.4...v1.6.5) (2020-08-05)
 
 ### [1.6.4](https://github.com/ecomplus/app-bling/compare/v1.6.3...v1.6.4) (2020-07-27)
