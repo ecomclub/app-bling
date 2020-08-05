@@ -105,10 +105,52 @@ module.exports = (appSdk) => {
                           .replace(/[^0-9a-z-]/g, '')
 
                         const name = variation[1].trim()
-                        specifications[type] = [{
-                          text: name,
-                          value: name.toLowerCase()
+                        let variationValue = ''
+                        if (type === 'colors') {
+                          switch (name) {
+                            case 'Preto':
+                              variationValue = '#000000'
+                              break
+                            case 'Vermelho':
+                              variationValue = '#ff0000'
+                              break
+                            case 'Azul':
+                              variationValue = '#0000ff'
+                              break
+                            case 'Branco':
+                              variationValue = '#ffffff'
+                              break
+                            case 'Roxo':
+                              variationValue = '#800080'
+                              break
+                            case 'Cinza':
+                              variationValue = '#808080'
+                              break
+                            case 'Amarelo':
+                              variationValue = '#ffff00'
+                              break
+                            case 'Rosa':
+                              variationValue = '#ff00ff'
+                              break
+                              default:
+                              variationValue = null
+                          }
+                          if (variationValue !== null) {
+                            specifications[type] = [{
+                              text: name,
+                              value: variationValue
+                            }]
+                          } else {
+                            specifications[type] = [{
+                              text: name
+                            }]
+                          }
+                        } else {
+                          specifications[type] = [{
+                            text: name,
+                            value: name.toLowerCase()
                         }]
+                        }
                       }
                     }
 
