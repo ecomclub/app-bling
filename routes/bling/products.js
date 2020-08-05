@@ -104,53 +104,39 @@ module.exports = (appSdk) => {
                           .replace(/\s/g, '-')
                           .replace(/[^0-9a-z-]/g, '')
 
-                        const name = variation[1].trim()
-                        let variationValue = ''
+                        const text = variation[1].trim()
+                        let value
                         if (type === 'colors') {
-                          switch (name) {
+                          switch (text) {
                             case 'Preto':
-                              variationValue = '#000000'
+                              value = '#000000'
                               break
                             case 'Vermelho':
-                              variationValue = '#ff0000'
+                              value = '#ff0000'
                               break
                             case 'Azul':
-                              variationValue = '#0000ff'
+                              value = '#0000ff'
                               break
                             case 'Branco':
-                              variationValue = '#ffffff'
+                              value = '#ffffff'
                               break
                             case 'Roxo':
-                              variationValue = '#800080'
+                              value = '#800080'
                               break
                             case 'Cinza':
-                              variationValue = '#808080'
+                              value = '#808080'
                               break
                             case 'Amarelo':
-                              variationValue = '#ffff00'
+                              value = '#ffff00'
                               break
                             case 'Rosa':
-                              variationValue = '#ff00ff'
+                              value = '#ff00ff'
                               break
-                              default:
-                              variationValue = null
-                          }
-                          if (variationValue !== null) {
-                            specifications[type] = [{
-                              text: name,
-                              value: variationValue
-                            }]
-                          } else {
-                            specifications[type] = [{
-                              text: name
-                            }]
                           }
                         } else {
-                          specifications[type] = [{
-                            text: name,
-                            value: name.toLowerCase()
-                        }]
+                          value = text.toLowerCase()
                         }
+                        specifications[type] = [{ text, value }]
                       }
                     }
 
