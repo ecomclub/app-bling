@@ -105,7 +105,10 @@ module.exports = (appSdk) => {
                           .replace(/[^0-9a-z-]/g, '')
 
                         const name = variation[1].trim()
-                        specifications[type] = [{ text: name }]
+                        specifications[type] = [{
+                          text: name,
+                          value: name.toLowerCase()
+                        }]
                       }
                     }
 
