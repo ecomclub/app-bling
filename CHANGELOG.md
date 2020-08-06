@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.7](https://github.com/ecomplus/app-bling/compare/v1.6.6...v1.6.7) (2020-08-06)
+
+
+### Bug Fixes
+
+* **save-in-db.js:** removed .then() from void function ([3512d7f](https://github.com/ecomplus/app-bling/commit/3512d7f54234e525834c3e784875a4bf92c21c79))
+
 ### [1.6.6](https://github.com/ecomplus/app-bling/compare/v1.6.5...v1.6.6) (2020-08-05)
 
 
