@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.7](https://github.com/ecomplus/app-bling/compare/v1.6.6...v1.6.7) (2020-08-06)
+
+
+### Bug Fixes
+
+* **import:** special handler for color specs ([#14](https://github.com/ecomplus/app-bling/issues/14)) ([d597649](https://github.com/ecomplus/app-bling/commit/d5976494becdab574c0bbc8a8888efdb69d38d20))
+
 ### [1.6.6](https://github.com/ecomplus/app-bling/compare/v1.6.5...v1.6.6) (2020-08-05)
 
 
