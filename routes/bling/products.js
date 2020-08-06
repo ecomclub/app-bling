@@ -104,11 +104,39 @@ module.exports = (appSdk) => {
                           .replace(/\s/g, '-')
                           .replace(/[^0-9a-z-]/g, '')
 
-                        const name = variation[1].trim()
-                        specifications[type] = [{
-                          text: name,
-                          value: name.toLowerCase()
-                        }]
+                        const text = variation[1].trim()
+                        let value
+                        if (type === 'colors') {
+                          switch (text.toLowerCase()) {
+                            case 'preto':
+                              value = '#000000'
+                              break
+                            case 'vermelho':
+                              value = '#ff0000'
+                              break
+                            case 'azul':
+                              value = '#0000ff'
+                              break
+                            case 'branco':
+                              value = '#ffffff'
+                              break
+                            case 'roxo':
+                              value = '#800080'
+                              break
+                            case 'cinza':
+                              value = '#808080'
+                              break
+                            case 'amarelo':
+                              value = '#ffff00'
+                              break
+                            case 'rosa':
+                              value = '#ff00ff'
+                              break
+                          }
+                        } else {
+                          value = text.toLowerCase()
+                        }
+                        specifications[type] = [{ text, value }]
                       }
                     }
 

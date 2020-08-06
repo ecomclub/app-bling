@@ -7,7 +7,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
+<<<<<<< HEAD
 * **save-in-db.js:** removed .then() from void function ([3512d7f](https://github.com/ecomplus/app-bling/commit/3512d7f54234e525834c3e784875a4bf92c21c79))
+=======
+* **import:** special handler for color specs ([#14](https://github.com/ecomplus/app-bling/issues/14)) ([d597649](https://github.com/ecomplus/app-bling/commit/d5976494becdab574c0bbc8a8888efdb69d38d20))
+>>>>>>> 9072513037eb81e7a1a6cb1211bed0e822c47286
 
 ### [1.6.6](https://github.com/ecomplus/app-bling/compare/v1.6.5...v1.6.6) (2020-08-05)
 
