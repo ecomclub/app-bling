@@ -38,6 +38,15 @@
       },
       "hide": true
     },
+    "enabled_sync_others_status": {
+      "schema": {
+        "type": "boolean",
+        "title": "Sincronizar todos os status (pedidos)",
+        "description": "Sincronizar pedidos com status diferente de pago",
+        "default": false
+      },
+      "hide": false
+    },
     "sync": {
       "schema": {
         "type": "object",
