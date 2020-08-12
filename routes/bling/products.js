@@ -1,17 +1,7 @@
 'use strict'
-// logger
-const logger = require('console-files')
+const newProduct = require('./../../lib/store-api/new-product')
 
-// bling client
-const blingClient = require('../../lib/bling/client')
-
-// read configured E-Com Plus app data
-const getConfig = require(process.cwd() + '/lib/store-api/get-config')
-
-//
-const ecomplusProductSchema = require('./../../lib/schemas/ecomplus-products')
-
-module.exports = (appSdk) => {
+module.exports = ({ appSdk, getConfig, logger, blingClient }) => {
   return (req, res) => {
     const storeId = parseInt(req.get('x-store-id'), 10) || req.query.storeId
     const { body } = req
@@ -72,7 +62,7 @@ module.exports = (appSdk) => {
               })
 
               .then(produto => {
-                const schema = ecomplusProductSchema(produto)
+                const schema = newProduct(produto)
                 return appSdk
                   .apiRequest(storeId, '/products.json', 'POST', schema)
                   .then(({ response }) => ({ data: response.data, produto }))
