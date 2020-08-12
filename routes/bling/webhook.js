@@ -10,7 +10,7 @@ const logger = require('console-files')
 const { randomObjectId } = require('@ecomplus/utils')
 const processQueue = []
 
-module.exports = appSdk => {
+module.exports = (appSdk, database) => {
   return (req, res) => {
     const { storeId } = req.query
     let { data } = req.body
@@ -18,11 +18,11 @@ module.exports = appSdk => {
       return res.sendStatus(400)
     }
     logger.log(`Bling webhook #${storeId}`)
-
+    const failed = []
     // get app configured options
     getConfig({ appSdk, storeId }, true)
       .then(configObj => {
-        if (configObj.bling_api_key) {          
+        if (configObj.bling_api_key) {
           if (typeof data === 'string') {
             try {
               data = JSON.parse(data)
@@ -46,7 +46,7 @@ module.exports = appSdk => {
               if (estoque && estoque.estoque) {
                 setTimeout(() => {
                   const apiKey = configObj.bling_api_key
-                  handleBlingCallback(appSdk, storeId, apiKey, estoque.estoque)
+                  handleBlingCallback(appSdk, storeId, apiKey, estoque.estoque, database)
                 }, 1000 * i)
               }
             })
@@ -70,29 +70,26 @@ module.exports = appSdk => {
 
                     if (order) {
                       if (trigger.nota && sync.bling.invoices) {
-                        const promise = new Promise(resolve => {
-                          // verifica se a nota ja existe na order
-                          const shippingInvoices = order.shipping_lines.find(shippin => shippin.invoices)
-                          let match
-                          if (shippingInvoices) {
-                            match = shippingInvoices.invoices
-                              .find(invoice => invoice.number === trigger.nota.chaveAcesso)
-                          }
+                        // verifica se a nota ja existe na order
+                        const shippingInvoices = order.shipping_lines.find(shippin => shippin.invoices)
+                        let match
+                        if (shippingInvoices) {
+                          match = shippingInvoices.invoices
+                            .find(invoice => invoice.number === trigger.nota.chaveAcesso)
+                        }
 
-                          if (!shippingInvoices || !match) {
-                            const update = [
-                              {
-                                number: trigger.nota.numero,
-                                serial_number: trigger.nota.numero,
-                                access_key: trigger.nota.chaveAcesso
-                              }
-                            ]
-                            resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
-                            appSdk.apiRequest(storeId, resource, 'PATCH', { invoices: update })
-                          }
-                          resolve()
-                        })
-                        promises.push(promise)
+                        if (!shippingInvoices || !match) {
+                          const update = [
+                            {
+                              number: trigger.nota.numero,
+                              serial_number: trigger.nota.numero,
+                              access_key: trigger.nota.chaveAcesso || ''
+                            }
+                          ]
+                          resource = `/orders/${order._id}/shipping_lines/${order.shipping_lines[0]._id}.json`
+                          const promise = appSdk.apiRequest(storeId, resource, 'PATCH', { invoices: update })
+                          promises.push(promise)
+                        }
                       }
 
                       if (sync.bling.financial_status) {
@@ -165,17 +162,33 @@ module.exports = appSdk => {
                       }
                     }
 
-                    Promise.all(promises).then(() => {
+                    return Promise.all(promises).then(() => {
                       logger.log(`Pedido ${trigger.numero} alterado via bling | store #${storeId}`)
-                    }).catch(e => {
-                      const err = new Error(`Erro ao atualizar o pedido ${trigger.numero} da loja ${storeId}`)
-                      if (e.response && e.response.data) {
-                        err.data = JSON.stringify(e.response.data)
-                      }
-                      logger.error(err)
                     })
                   })
-                  .catch(e => logger.error('BlingUpdateErr', e))
+                  .catch(error => {
+                    const { message } = error
+                    const payload = {}
+                    if (error.response) {
+                      delete error.config.headers
+                      if (error.response.data) {
+                        payload.data = error.response.data
+                      }
+                      payload.status = error.response.status
+                      payload.config = error.config
+                    }
+
+                    database.logger.error([{
+                      message,
+                      resource_id: trigger.codigo,
+                      store_id: storeId,
+                      resource: payload && payload.config ? payload.config.url : '',
+                      operation: 'Webhook Bling>Ecom',
+                      payload: JSON.stringify(payload)
+                    }])
+
+                    logger.error('BlingUpdateErr', payload)
+                  })
                 processQueue.splice(processQueue.indexOf(trigger.numero), 1)
               }, Math.random() * (5000 - 1000) + 1000)
             }
