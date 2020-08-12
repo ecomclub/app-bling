@@ -7,6 +7,13 @@ const logger = require('console-files')
 // handle app authentication to Store API
 // https://github.com/ecomclub/ecomplus/application-sdk
 const { ecomAuth } = require('@ecomplus/application-sdk')
+// @ecomplus/client
+const ecomClient = require('@ecomplus/client')
+
+const getStores = require('./../lib/get-stores')
+const MapStores = require('./../lib/map-stores')
+const database = require('./../lib/database')
+const blingClient = require('./../lib/bling/client')
 
 logger.log('--> Start running daemon processes')
 
@@ -28,11 +35,12 @@ ecomAuth.then(appSdk => {
   }
 
   // products
-  require('./../lib/ecomplus/products/save-in-db')(appSdk)
-  require('./../lib/ecomplus/products/sync-with-bling')(appSdk)
+  const settings = { ecomClient, getStores, MapStores, database, appSdk, logger }
+  require('./../lib/ecomplus/products/save-in-db')(settings)
+  require('./../lib/ecomplus/products/sync-with-bling')({ ...settings, blingClient })
   // // orders
-  require('./../lib/ecomplus/orders/save-in-db')(appSdk)
-  require('./../lib/ecomplus/orders/sent-to-bling')(appSdk)
+  require('./../lib/ecomplus/orders/save-in-db')(settings)
+  require('./../lib/ecomplus/orders/sent-to-bling')({ ...settings, blingClient })
 })
 
 ecomAuth.catch(err => {
