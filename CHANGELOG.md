@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/ecomplus/app-bling/compare/v1.6.7...v1.7.0) (2020-08-12)
+
+
+### Features
+
+* **auth-callback.js:** generating x-store-secret for new installations ([c402c7c](https://github.com/ecomplus/app-bling/commit/c402c7c75a5bf6008cfe4017944908a8984d7f18))
+* **database:** save errors ([5f0b71b](https://github.com/ecomplus/app-bling/commit/5f0b71b22ce5812729ae74af610da9a09e92d327))
+* **webhook:** accepting order triggers for any status ([fec1452](https://github.com/ecomplus/app-bling/commit/fec14528f5e045dc46c8c85710e072b93126f355))
+* routes for api ([3ea443c](https://github.com/ecomplus/app-bling/commit/3ea443c33f2a011a2b0c51814d203d93edce3ed4))
+
+
+### Bug Fixes
+
+* **import:** special handler for color specs ([#14](https://github.com/ecomplus/app-bling/issues/14)) ([d597649](https://github.com/ecomplus/app-bling/commit/d5976494becdab574c0bbc8a8888efdb69d38d20))
+* **webhook:** avoiding errors with null invoice key ([f94da45](https://github.com/ecomplus/app-bling/commit/f94da45f0aa07501ff260253016eaa9cb74ecf55))
+
 ### [1.6.7](https://github.com/ecomplus/app-bling/compare/v1.6.6...v1.6.7) (2020-08-06)
 
 
