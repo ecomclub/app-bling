@@ -7,6 +7,7 @@ const logger = require('console-files')
 // handle app authentication to Store API
 // https://github.com/ecomplus/application-sdk
 const { ecomAuth, ecomServerIps } = require('@ecomplus/application-sdk')
+const ecomClient = require('@ecomplus/client')
 
 // web server with Express
 const express = require('express')
@@ -50,20 +51,91 @@ ecomAuth.then(appSdk => {
   const routes = './../routes'
   router.get('/', require(`${routes}/`)())
 
-  // base routes for E-Com Plus Store API
-  ;['auth-callback', 'webhook'].forEach(endpoint => {
-    let filename = `/ecom/${endpoint}`
-    router.post(filename, require(`${routes}${filename}`)(appSdk))
-  })
+    // base routes for E-Com Plus Store API
+    ;['auth-callback'].forEach(endpoint => {
+      let filename = `/ecom/${endpoint}`
+      router.post(filename, require(`${routes}${filename}`)(appSdk))
+    })
+
+  const blingClient = require('./../lib/bling/client')
+  const getConfig = require('./../lib/store-api/get-config')
+  const database = require('./../lib/database')
+
+  const appParams = { appSdk, logger, blingClient, getConfig, database, ecomClient }
+
+  // webhook ecom :$
+  router.post('/ecom/webhook', require('./../routes/ecom/webhook')(appParams))
 
   /* Add custom app routes here */
-  router.post('/bling/webhook', require('./../routes/bling/webhook')(appSdk))
-  router.post('/bling/products', require('./../routes/bling/products')(appSdk))
+  router.post('/bling/webhook', require('./../routes/bling/webhook')(appSdk, database))
 
-  // ecomplus
+  // todo
+  // - depreciar as rotas abaixo
+  router.post('/bling/products', require('./../routes/bling/products')(appSdk))
   router.post('/ecomplus/products', require('./../routes/ecom/products')(appSdk))
   router.post('/ecomplus/orders', require('./../routes/ecom/orders')(appSdk))
   router.post('/ecomplus/stock', require('./../routes/ecom/stock')(appSdk))
+  // -
+
+  router.post('/api/products/stock', require('../routes/api/products/stock')(appParams))
+  router.post('/api/products/bling', require('../routes/api/products/bling')(appParams))
+  router.post('/api/products/ecom', require('../routes/api/products/ecom')(appParams))
+  router.post('/api/orders/bling', require('../routes/api/orders/bling')(appParams))
+  router.get('/api/products', require('../routes/api/products/find')(appParams))
+  router.get('/api/products/:id', require('../routes/api/products/find')(appParams))
+  router.delete('/api/products/:id', require('./../routes/api/products/delete')(appParams))
+  router.post('/authenticate', require('./../routes/api/authenticate')(appParams))
+
+  // api middleware
+  app.use(async (req, res, next) => {
+    if (req.url.startsWith('/api/')) {
+      // get E-Com Plus Store ID from request header
+      req.storeId = parseInt(req.get('x-store-id'), 10)
+      req.storeSecret = req.get('x-store-secret')
+
+      if (!req.storeId || !req.storeSecret) {
+        return res.status(406).send({
+          status: 406,
+          message: 'X-Store-Id e X-Store-Secrete são obrigatórios, acesse essa página via admin https://admin.e-com.plus'
+        })
+      }
+
+      try {
+        req.appConfig = await getConfig({ appSdk, storeId: req.storeId }, true)
+      } catch (error) {
+        return res.status(500).send({
+          status: 500,
+          message: 'Get appConfig error',
+          error
+        })
+      }
+
+      if (req.appConfig.store_secret !== req.storeSecret || req.storeSecret.length !== 32) {
+        return res.status(401).send({
+          status: 401,
+          message: 'X-Store-Secret inválido.'
+        })
+      }
+
+      if (req.method === 'POST' && !req.appConfig.bling_api_key) {
+        res.status(409)
+        return res.send({
+          error: 'Unauthorized',
+          message: 'Configure o campo bling_api_key no aplicativo instalado em https://admin.e-com.plus.'
+        })
+      }
+
+      if (req.method === 'POST' && !req.body || typeof req.body === 'undefined') {
+        res.status(400)
+        return res.send({
+          error: 'Body inválid.',
+          message: 'Body inválido'
+        })
+      }
+    }
+
+    next()
+  })
 
   app.use(express.static('assets'))
   router.get('/app/', function (req, res) {
