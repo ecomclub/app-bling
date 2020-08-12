@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/ecomplus/app-bling/compare/v1.7.0...v1.7.1) (2020-08-12)
+
+
+### Bug Fixes
+
+* preventing from starting the service twice ([4daf41e](https://github.com/ecomplus/app-bling/commit/4daf41e52dde0cce3f882f63a4fd3b590555ef61))
+
 ## [1.7.0](https://github.com/ecomplus/app-bling/compare/v1.6.7...v1.7.0) (2020-08-12)
 
 
