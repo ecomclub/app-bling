@@ -1,18 +1,6 @@
 'use strict'
 
-// logger
-const logger = require('console-files')
-
-// ecomClinet
-const ecomClient = require('@ecomplus/client')
-
-// read configured E-Com Plus app data
-const getConfig = require(process.cwd() + '/lib/store-api/get-config')
-
-// bling client
-const blingClient = require('../../lib/bling/client')
-
-module.exports = (appSdk) => {
+module.exports = ({ appSdk, getConfig, logger, blingClient, ecomClient }) => {
   return (req, res) => {
     const storeId = parseInt(req.get('x-store-id') || req.query.store_id, 10)
     const { body } = req

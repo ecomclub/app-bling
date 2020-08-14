@@ -1,17 +1,6 @@
 'use strict'
-// logger
-const logger = require('console-files')
 
-// ecomClinet
-const ecomClient = require('@ecomplus/client')
-
-// database
-const database = require('../../lib/database')
-
-// read configured E-Com Plus app data
-const getConfig = require(process.cwd() + '/lib/store-api/get-config')
-
-module.exports = (appSdk) => {
+module.exports = ({ appSdk, getConfig, logger, database, ecomClient }) => {
   return (req, res) => {
     const storeId = parseInt(req.get('x-store-id'), 10) || req.query.storeId
     const { body } = req
