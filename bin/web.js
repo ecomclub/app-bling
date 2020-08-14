@@ -71,10 +71,10 @@ ecomAuth.then(appSdk => {
 
   // todo
   // - depreciar as rotas abaixo
-  router.post('/bling/products', require('./../routes/bling/products')(appSdk))
-  router.post('/ecomplus/products', require('./../routes/ecom/products')(appSdk))
-  router.post('/ecomplus/orders', require('./../routes/ecom/orders')(appSdk))
-  router.post('/ecomplus/stock', require('./../routes/ecom/stock')(appSdk))
+  router.post('/bling/products', require('./../routes/bling/products')(appParams))
+  router.post('/ecomplus/products', require('./../routes/ecom/products')(appParams))
+  router.post('/ecomplus/orders', require('./../routes/ecom/orders')(appParams))
+  router.post('/ecomplus/stock', require('./../routes/ecom/stock')(appParams))
   // -
 
   router.post('/api/products/stock', require('../routes/api/products/stock')(appParams))
