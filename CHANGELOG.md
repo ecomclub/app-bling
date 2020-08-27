@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.6](https://github.com/ecomplus/app-bling/compare/v1.7.5...v1.7.6) (2020-08-27)
+
+
+### Bug Fixes
+
+* **new-product.js:** sync quantity of common products ([18fd423](https://github.com/ecomplus/app-bling/commit/18fd4233cc8809952f063a8d499e3a83beb107e6))
+
 ### [1.7.5](https://github.com/ecomplus/app-bling/compare/v1.7.4...v1.7.5) (2020-08-24)
 
 ### [1.7.4](https://github.com/ecomplus/app-bling/compare/v1.7.3...v1.7.4) (2020-08-21)
