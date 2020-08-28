@@ -1,7 +1,7 @@
 {
   "name": "app-bling",
   "private": true,
-  "version": "1.7.6",
+  "version": "1.7.7",
   "description": "bling for e-com.plus",
   "main": "main.js",
   "scripts": {
