@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/ecomplus/app-bling/compare/v1.7.10...v1.8.0) (2020-10-30)
+
+
+### Features
+
+* **products:** delete if exist ([7d5e062](https://github.com/ecomplus/app-bling/commit/7d5e06226535fbf81f348bd35ec0aebe33da0af9))
+
 ### [1.7.10](https://github.com/ecomplus/app-bling/compare/v1.7.9...v1.7.10) (2020-10-30)
 
 
