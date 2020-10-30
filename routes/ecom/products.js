@@ -60,10 +60,11 @@ module.exports = ({ appSdk, getConfig, logger, database, ecomClient }) => {
             return ecomClient.store({ url, storeId })
           }).then(({ data }) => {
             return database.products.get(data._id, storeId).then(row => ({ row, data }))
-          }).then(({ data, row }) => {
+          }).then(async ({ data, row }) => {
             if (row && row.length) {
               // já existe no db
-              return false
+              await database.products.delete(row[0].id, storeId)
+                .then(() => logger.log('Produto existente excluido'))
             }
 
             // save product
