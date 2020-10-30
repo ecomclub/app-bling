@@ -17,7 +17,7 @@ module.exports = (appSdk, database) => {
     if (!data) {
       return res.sendStatus(400)
     }
-    logger.log(`Bling webhook #${storeId}`)
+    // logger.log(`Bling webhook #${storeId}`)
     const failed = []
     // get app configured options
     getConfig({ appSdk, storeId }, true)
