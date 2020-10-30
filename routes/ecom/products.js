@@ -22,91 +22,141 @@ module.exports = ({ appSdk, getConfig, logger, database, ecomClient }) => {
     }
 
     // get app configured options
-    getConfig({ appSdk, storeId }, true)
-
-      .then(configObj => {
-        if (configObj.bling_api_key) {
-          let current = 0
+    getConfig({ appSdk, storeId }, true).then(configObj => {
+      if (configObj.bling_api_key) {
+        const lojaId = configObj.bling_loja_id
+        const failed = []
+        const sync = (current = 0) => {
           const nextProduct = () => {
             current++
-            recursive()
+            return sync(current)
           }
-          // sync recursive
-          // to prevent 429 code or 503
-          const recursive = () => {
-            if (body[current]) {
-              ecomClient
-                .store({
-                  url: `/products.json?sku=${body[current]}`,
-                  storeId
-                })
-                .then(({ data }) => {
-                  const { result } = data
-                  if (result.length) {
-                    const lojaId = configObj.bling_loja_id
-                    const url = `/products/${result[0]._id}.json`
-                    ecomClient
-                      .store({ url, storeId })
-                      .then(({ data }) => {
-                        return database
-                          .products
-                          .get(data._id, storeId)
-                          .then(row => {
-                            if (!row || !row.length) {
-                              const { variations } = data
-                              // save product
-                              return database
-                                .products
-                                .save(data.sku, data.name, data.price, data.quantity || 0, data.price, data.quantity || 0, storeId, lojaId, data._id)
-                                .then(() => {
-                                  logger.log(`Produto ${data.sku} salvo no banco de dados e será enviado ao tiny na proxima sincronização. | store #${storeId}`)
-                                  // save variations?
-                                  if (variations && Array.isArray(variations) && variations.length) {
-                                    variations.forEach(variation => {
-                                      if (variation.sku) {
-                                        database
-                                          .variations
-                                          .save(variation.name, variation._id, variation.sku, data.sku, variation.quantity || 0, variation.quantity || 0, lojaId, storeId)
-                                      } else {
-                                        logger.log(`--> Variação ${variation._id} sem sku pra o produto ${data._id}, não salva no banco, será necessário sincronizar o produto manualmente`)
-                                      }
-                                    })
-                                  }
-                                  nextProduct()
-                                })
-                            } else {
-                              nextProduct()
-                            }
-                          })
-                      })
+
+          if (!body[current]) {
+            if (failed) {
+              database.logger.error(failed).then(p => {
+                if (failed.length) {
+                  return logger.log('Sincronização manual de produtos finalizou com erros; ', JSON.stringify(failed, undefined, 2))
+                }
+              })
+            }
+
+            return true
+          }
+
+          ecomClient.store({
+            url: '/products.json?sku=' + body[current],
+            storeId
+          }).then(({ data }) => {
+            const { result } = data
+            if (!result || !result.length) {
+              const err = new Error('Produto não encontrado na plataforma: ' + body[current])
+              err.product_sku = body[current]
+              err.code = 'notfound'
+              throw err
+            }
+
+            const url = `/products/${result[0]._id}.json`
+            return ecomClient.store({ url, storeId })
+          }).then(({ data }) => {
+            return database.products.get(data._id, storeId).then(row => ({ row, data }))
+          }).then(({ data, row }) => {
+            if (row && row.length) {
+              // já existe no db
+              return false
+            }
+
+            // save product
+            return database
+              .products
+              .save(data.sku,
+                data.name,
+                data.price,
+                data.quantity || 0,
+                data.price,
+                data.quantity || 0,
+                storeId,
+                lojaId,
+                data._id)
+              .then(() => data)
+          }).then(data => {
+            if (data) {
+              logger.log('Produto salvo para proxima sincronização:', data.sku,
+                'Store: ', storeId)
+              // save variations?
+              const { variations } = data
+              if (variations && Array.isArray(variations) && variations.length) {
+                const promises = []
+                variations.forEach(variation => {
+                  if (variation.sku) {
+                    const promise = database
+                      .variations
+                      .save(variation.name, variation._id, variation.sku, data.sku, variation.quantity || 0, variation.quantity || 0, lojaId, storeId)
+                    promises.push(promise)
                   } else {
-                    nextProduct()
+                    logger.log('Variação sem SKU: ', variation._id,
+                      'Produto pai: sku;', data.sku,
+                      'Variação não será sincronizada, favor enviar o produto novamente',
+                      'StoreId:', storeId)
+                    failed.push({
+                      message: `Variação sem SKU, produto salvo mas a variação não. Delete o produto pai (sku: ${data.sku}) antes de sincronizar novamente`,
+                      resource_id: data._id,
+                      store_id: storeId,
+                      resource: 'products',
+                      operation: 'Envio manual de produtos',
+                      payload: JSON.stringify(variation)
+                    })
                   }
                 })
+
+                return Promise.all(promises)
+              }
             }
-          }
 
-          recursive()
+            return true
+          }).then(() => nextProduct())
+            .catch(error => {
+              const { message } = error
+              const payload = {}
+              if (error.response) {
+                delete error.config.headers
+                if (error.response.data) {
+                  payload.data = error.response.data
+                }
+                payload.status = error.response.status
+                payload.config = error.config
+              }
 
-          res.end()
-        } else {
-          res.status(401)
-          res.send({
-            error: 'Unauthorized',
-            message: 'bling_api_key não configurada no aplicativo.'
-          })
+              failed.push({
+                message,
+                resource_id: body[current],
+                store_id: storeId,
+                resource: 'produtos (salvar produtos)',
+                operation: 'Envio manual de produtos',
+                payload: JSON.stringify(payload)
+              })
+              nextProduct()
+            })
         }
-      })
 
-      .catch(err => {
-        // logger.error(err)
-        // request to Store API with error response
-        // return error status code
-        res.status(500)
-        let { message } = err
-        res.send({
-          message
+        sync()
+        return res.end()
+      } else {
+        res.status(401)
+        return res.send({
+          error: 'Unauthorized',
+          message: 'bling_api_key não configurada no aplicativo.'
         })
+      }
+    }).catch(err => {
+      // logger.error(err)
+      // request to Store API with error response
+      // return error status code
+      res.status(500)
+      let { message } = err
+      res.send({
+        message
       })
+    })
   }
 }
