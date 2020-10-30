@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.10](https://github.com/ecomplus/app-bling/compare/v1.7.9...v1.7.10) (2020-10-30)
+
+
+### Bug Fixes
+
+* **products:** manual sync ([da933b1](https://github.com/ecomplus/app-bling/commit/da933b176305e4e2d4e53b8b16e2ecffd721d6d3))
+
 ### [1.7.9](https://github.com/ecomplus/app-bling/compare/v1.7.8...v1.7.9) (2020-09-07)
 
 ### [1.7.8](https://github.com/ecomplus/app-bling/compare/v1.7.7...v1.7.8) (2020-09-01)
