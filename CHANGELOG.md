@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.1](https://github.com/ecomplus/app-bling/compare/v1.8.0...v1.8.1) (2020-11-06)
+
+
+### Bug Fixes
+
+* **#19:** upload product pictures to ecom-storage ([d71e136](https://github.com/ecomplus/app-bling/commit/d71e136411fb5a8858017714f1f2e754667d249b)), closes [#19](https://github.com/ecomplus/app-bling/issues/19)
+
 ## [1.8.0](https://github.com/ecomplus/app-bling/compare/v1.7.10...v1.8.0) (2020-10-30)
 
 
