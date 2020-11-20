@@ -54,7 +54,7 @@ module.exports = (appSdk, database) => {
             const { sync } = configObj
             // update orders
             const trigger = retorno.pedidos[0].pedido
-            let resource = `/orders.json?number=${trigger.numero}` +
+            let resource = `/orders.json?number=${(trigger.numeroPedidoLoja || trigger.numero)}` +
               '&fields=_id,number,status,financial_status,fulfillment_status,shipping_lines' +
               ',buyers,items,hidden_metafields'
             const method = 'GET'
