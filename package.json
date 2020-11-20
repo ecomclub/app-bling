@@ -1,12 +1,12 @@
 {
   "name": "app-bling",
   "private": true,
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "bling for e-com.plus",
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "local": "ECOMCLIENT_NOTIMEOUT=true DB_NAME=bling ECOM_AUTH_DB=/var/dbs/bling.sqlite LOGGER_OUTPUT=/var/log/nodejs/bling.out LOGGER_ERRORS=/var/log/nodejs/bling.error LOGGER_FATAL_ERRORS=/var/log/nodejs/_stderr nodemon --inspect main.js",
+    "local": "ECOMCLIENT_NOTIMEOUT=true DB_NAME=bling ECOM_AUTH_DB=/var/dbs/bling.sqlite LOGGER_OUTPUT=/var/log/nodejs/bling.out LOGGER_ERRORS=/var/log/nodejs/bling.error LOGGER_FATAL_ERRORS=/var/log/nodejs/_stderr nodemon main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "standard-version",
     "publish:market": "node ./scripts/market-publication.js"

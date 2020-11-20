@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.2](https://github.com/ecomplus/app-bling/compare/v1.8.1...v1.8.2) (2020-11-20)
+
+
+### Bug Fixes
+
+* callback number doesnt match ([d567633](https://github.com/ecomplus/app-bling/commit/d5676330ca27b25d5c34f58324e01f87d6f9182e))
+
 ### [1.8.1](https://github.com/ecomplus/app-bling/compare/v1.8.0...v1.8.1) (2020-11-06)
 
 
